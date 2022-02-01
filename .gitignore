@@ -1,8 +1,15 @@
 # Xmake cache
 .xmake/
 build/
+.deps/
 
 # MacOS Cache
 .DS_Store
 
+#vim cache
+*.un~
 
+#make cache
+makefile
+cmakelist.txt
+vs20*
