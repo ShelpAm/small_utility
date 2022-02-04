@@ -2,14 +2,11 @@
 .xmake/
 build/
 .deps/
+vs20*
 
 # MacOS Cache
 .DS_Store
 
 #vim cache
 *.un~
-
-#make cache
-makefile
-cmakelist.txt
-vs20*
+*.swp
