@@ -1,4 +1,4 @@
-target("test-file")
+target("test-utility")
     set_kind("binary")
     set_symbols("debug")
     set_languages("cxx11")

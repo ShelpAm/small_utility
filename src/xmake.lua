@@ -1,7 +1,7 @@
 target("small_utility")
     set_kind("static")
+    set_symbols("debug")
     set_languages("cxx11")
-    set_optimize("fastest")
 
     set_objectdir("$(buildir)/obj/")
     add_includedirs("$(projectdir)/src/")

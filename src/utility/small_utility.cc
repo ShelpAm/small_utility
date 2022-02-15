@@ -1,4 +1,4 @@
-#include "small_utility.h"
+#include "utility/small_utility.h"
 
 #include <cstdio>
 
@@ -16,7 +16,7 @@ void Sleep (int const time) {
   ts.tv_nsec = (time % 1000) * 1000 * 1000;
   int const error = nanosleep(&ts, nullptr);
   if (error == -1) {
-    printf("[Prompt::small_utility::Sleep] Sleeping has been interrupted.");
+    printf("[Warn::small_utility::Sleep] Sleeping has been interrupted.");
   }
 #elif defined WIN32 // linux
   Sleep(time);

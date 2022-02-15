@@ -3,7 +3,12 @@
 
 #include "log/logger_forward.h"
 
+#include <vector>
+
 #include "file/file.h"
+#include "log/log_level.h"
+#include "log/log_message_info.h"
+#include "log/log_target.h"
 
 namespace small_utility {
 
@@ -11,26 +16,14 @@ namespace log_stuff {
 
 class Logger {
  public:
-  static Logger &GetInstance();
+  static Logger &instance();
 
   void AddLogMessageInfo(LogMessageInfo const &log_message_info);
-  void SetLogTarget(LogTargetPtr const &log_target_ptr) {
-    log_target_ = log_target;
-  }
+  void WriteToTarget(LogTarget const &log_target);
 
-  void WriteToTarget();
  private:
   std::vector<LogMessageInfo> log_message_infos_;
   LogLevel minimum_log_level_;
-  LogTargetPtr log_target_ptr_;
-};
-
-enum class LogLevel : int {
-  kLogLevelDebug = 1,
-  kLogLevelInfo,
-  kLogLevelWarning,
-  kLogLevelError,
-  kLogLevelFatal
 };
 
 // Parameter:

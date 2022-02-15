@@ -25,6 +25,9 @@ int main() {
   s2 = nullptr;
   printf("%s-,%s-,%i-0,%i-0\n", s2.ToCString(), s2.GetData(), s2.GetLength(), s2.GetSize());
 
+  s1 = "0123456789";
+  printf("%s-3456\n", s1.sub_string(3, 6).ToCString());
+
   printf("OK.\n");
 
   return 0;

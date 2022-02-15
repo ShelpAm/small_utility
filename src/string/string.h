@@ -25,7 +25,8 @@ class String {
   char const *ToCString() const { return data_; }
   char const *GetData() const { return data_; }
   int const GetLength() const { return length_; }
-  int const GetSize() const { return 1 * length_; }
+  int const GetSize() const { return sizeof(char) * length_; }
+  String sub_string(int const left_index, int const right_index) const;
  private:
   void CopyToThis(char const *data, int const length);
 

@@ -10,12 +10,7 @@ namespace small_utility {
 
 namespace log_stuff {
 
-const int Logger::max_content_size_ = 256;
-
-bool Logger::Initialize() { return true; }
-
-void Logger::Terminate() {}
-
+/*
 void Logger::PrintFormat(LogLevel const log_level, char const *format, ...) {
   if (static_cast<int>(log_level_) < static_cast<int>(log_level) {
     return;
@@ -62,12 +57,14 @@ void Logger::PrintFormat(LogLevel const log_level, char const *format, ...) {
 
   return;
 }
+*/
 
 void ParseFunctionName(char *destination, char const *raw_function_name) {
   strcpy(destination, "please finish this");
   /*   UNFINISHED     */
 }
 
+/*
 void Debug(char const *format, ...) {
   va_list args;
   va_start(args, format);
@@ -102,6 +99,7 @@ void Fatal(char const *format, ...) {
   Logger::PrintFormat(LogLevel::kLogLevelError, format, args);
   va_end(args);
 }
+*/
 
 }
 
