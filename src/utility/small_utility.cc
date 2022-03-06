@@ -6,11 +6,11 @@ namespace small_utility {
 
 void Sleep (int const time) {
   if (time < 0) {
-    printf("[ERROR::small_utility::Sleep] The delay time is smaller than 0, "
-           "as big as %i.\n", time);
+    printf("[ERROR::small_utility::Sleep] The delay time is smaller"
+           "than 0, as big as %i.\n", time);
     return;
   }
-#ifdef linux
+#if defined linux
   timespec ts;
   ts.tv_sec = time / 1000;
   ts.tv_nsec = (time % 1000) * 1000 * 1000;
