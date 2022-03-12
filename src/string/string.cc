@@ -1,115 +1,113 @@
 #include "string/string.h"
 
-#include <cassert>
 #include <cstring>
-#include <sstream>
+
+#include "utility/small_utility.h"
 
 namespace small_utility {
 
 namespace string_stuff {
 
-String::String() : data_(nullptr), length_(0) {
-  CopyToThis(nullptr, 0);
+string::string(string const &rhs) : data_(nullptr) {
+  string temp(rhs.data());
+  swap(temp);
 }
 
-String::String(String const &rhs) : data_(nullptr), length_(0) {
-  CopyToThis(rhs.GetData(), rhs.GetLength());
+string::string(char const *const rhs) : size_(strlen(rhs)), capacity_(size_) {
+  data_ = new char[size_ + 1];
+  memcpy(data_, rhs, size_ + 1);
 }
 
-String::String(char const *rhs) : data_(nullptr), length_(0) {
-  CopyToThis(rhs, (rhs ? strlen(rhs) : 0));
-}
-
-String &String::operator=(String const &rhs) {
-  CopyToThis(rhs.GetData(), rhs.GetLength());
+string &string::operator=(string const &rhs) {
+  string temp(rhs.data());
+  swap(temp);
   return *this;
 }
 
-String &String::operator=(char const *rhs) {
-  CopyToThis(rhs, (rhs ? strlen(rhs) : 0));
+string &string::operator=(char const *const rhs) {
+  string temp(rhs);
+  swap(temp);
   return *this;
 }
 
-String &String::operator+=(String const &rhs) {
-  char *origin_data = data_;
-  int const objective_length = length_ + rhs.GetLength();
-  data_ = new char[objective_length + 1];
-  memcpy(data_, origin_data, length_);
-  memcpy(data_ + length_, rhs.GetData(), rhs.GetLength());
-  length_ = objective_length;
-  delete[] origin_data;
+string &string::operator+=(char const c) {
+  push_back(c);
   return *this;
 }
 
-String &String::operator+=(char const *rhs) {
-  if (!rhs) {
-    return *this;
-  }
-  char *origin_data = data_;
-  int const rhs_length = strlen(rhs);
-  int const objective_length = length_ + rhs_length;
-  data_ = new char[objective_length + 1];
-  memcpy(data_, origin_data, length_);
-  memcpy(data_ + length_, rhs, rhs_length);
-  length_ = objective_length;
-  delete[] origin_data;
-  return *this;
+string &string::operator+=(char const *const str) {
+  append(rhs);
+ return *this;
 }
 
-String::~String() {
+string::~string() {
   delete[] data_;
 }
 
-char const String::operator[](int const index) const {
-  assert(index >= 0 && index < length_);
+char const string::operator[](int const index) const {
+  assert(index >= 0 && index < size_);
   return data_[index];
 }
-bool const String::operator==(String const &rhs) const {
-  return !strcmp(data_, rhs.GetData());
+
+bool const string::operator==(string const &rhs) const {
+  return !strcmp(data_, rhs.data());
 }
 
-bool const String::operator==(char const *rhs) const {
+bool const string::operator==(char const *rhs) const {
   return !strcmp(data_, (rhs ? rhs : ""));
 }
 
-bool const String::operator!=(String const &rhs) const {
+bool const string::operator!=(string const &rhs) const {
   return !(*this == rhs);
 }
 
-bool const String::operator!=(char const *rhs) const {
+bool const string::operator!=(char const *rhs) const {
   return !(*this == rhs);
 }
 
-String String::sub_string(int const left_index, int const right_index) const {
-  assert(left_index >= 0);
-  assert(right_index <= this->GetLength());
-  assert(right_index >= left_index);
-  int const terminal_string_length = right_index - left_index + 1;
-  char *terminal_data = new char[terminal_string_length + 1];
-  // the "+1" is for '\0'.
-  memcpy(terminal_data, this->GetData() + left_index, terminal_string_length);
-  memcpy(terminal_data + terminal_string_length , "\0", 1);
-  return String(terminal_data);
+void string::swap(string &rhs) {
+  small_utility::swap(data_, rhs.data_);
+  small_utility::swap(size_, rhs.size_);
+  small_utility::swap(capacity_, rhs.capacity_);
 }
 
-void String::CopyToThis(char const *data, int const length) {
-  if (data_ == data) {
-    return;
+void string::push_back(char const c) {
+  if (equal(size_, capacity_)) {
+    reserve(capacity_ * 2);
   }
-  if (data_) {
-    delete[] data_;
+  data_[size_] = c;
+  data_[size_ + 1] = '\0';
+  ++size_;
+}
+
+void string::append(char const *const str) {
+  const int str_length = strlen(str);
+  const int adds_up_length = str_length + size_;
+  if(adds_up_length >= capacity_) {
+    reserve(adds_up_length * 2);
   }
-  data_ = new char[length + 1];
-  memcpy(data_, (data ? data : "\0"), length + 1);
-  length_ = length;
+  memcpy(data_ + size_, str, str_length);
+  size_ += str_length;
 }
 
-String operator+(char const *lhs, String const &rhs) {
-  return String(lhs) += rhs;
+string operator+(char const *lhs, string const &rhs) {
+  return string(lhs) += rhs;
 }
 
-String operator+(String const &lhs, char const *rhs) {
-  return String(lhs) += rhs;
+string operator+(string const &lhs, char const *rhs) {
+  return string(lhs) += rhs;
+}
+
+
+
+string string::sub_string_from_to(int const left_index,
+                                  int const right_index) const {
+  if (left_index < 0 || right_index > size_
+      || right_index < left_index) {
+    return string();
+  }
+  printf("There is some problem in sub_string.");
+  return string();
 }
 
 }

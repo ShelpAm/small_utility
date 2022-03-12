@@ -5,7 +5,7 @@ namespace small_utility {
 
 namespace string_stuff {
 
-class String;
+class string;
 
 }
 
