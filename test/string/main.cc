@@ -3,8 +3,8 @@
 #include <cstdio>
 
 int main() {
-  small_utility::string_stuff::String s1;
-  small_utility::string_stuff::String s2;
+  small_utility::string_stuff::string s1;
+  small_utility::string_stuff::string s2;
 
   s1 = "s1";
   s2 = "s2";
@@ -17,16 +17,16 @@ int main() {
   s1 = "s1";
   s1 += s2;
   printf("%s-s1s2,%s-s1s2,%i-4,%i-4.\n",
-         s1.ToCString(), s1.GetData(), s1.GetLength(), s1.GetSize());
+         s1.c_string(), s1.data(), s1.size(), s1.size());
 
   s2 = "";
-  printf("%s-,%s-,%i-0,%i-0\n", s2.ToCString(), s2.GetData(), s2.GetLength(), s2.GetSize());
+  printf("%s-,%s-,%i-0,%i-0\n", s2.c_string(), s2.data(), s2.size(), s2.size());
 
   s2 = nullptr;
-  printf("%s-,%s-,%i-0,%i-0\n", s2.ToCString(), s2.GetData(), s2.GetLength(), s2.GetSize());
+  printf("%s-,%s-,%i-0,%i-0\n", s2.c_string(), s2.data(), s2.size(), s2.size());
 
   s1 = "0123456789";
-  printf("%s-3456\n", s1.sub_string(3, 6).ToCString());
+  printf("%s-3456\n", s1.sub_string_from_to(3, 6).c_string());
 
   printf("OK.\n");
 
