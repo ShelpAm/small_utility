@@ -90,6 +90,43 @@ void string::append(char const *const str) {
   size_ += str_length;
 }
 
+void string::reserve(int const size) {
+  if (size <= size_) {
+    return;
+  }
+  char *new_data = new char[size + 1];
+  memcpy(new_data, data_, size_);
+  delete[] data_;
+  data_ = new_data;
+  capacity_ = size;
+}
+
+void string::resize(int const size, char c) {
+  if (size < size_) {
+    data_[size] = '\0';
+  } else {
+    if (size > capacity_) {
+      reserve(size);
+    }
+    for (int i = 0; i != size; ++i) {
+      data_[i] = c;
+    }
+    data_[size] = '\0';
+  }
+  size_ = size;
+}
+
+
+// insert
+
+void string::erase(int const position, int const length) {
+}
+
+void string::clear() {
+  data_[0] = '\0';
+  size_ = 0;
+}
+
 string operator+(char const *lhs, string const &rhs) {
   return string(lhs) += rhs;
 }
