@@ -11,24 +11,26 @@ int main() {
   s1 = s2;
 
   if (s1 != s2) {
-    printf("This should not be printed, s1 != s2.\n");
+    printf("Error0\n");
   }
 
   s1 = "s1";
   s1 += s2;
-  printf("%s-s1s2,%s-s1s2,%i-4,%i-4.\n",
-         s1.c_string(), s1.data(), s1.size(), s1.size());
+  if (s1 != "s1s2" || s1.size() != 4) {
+    printf("Error1\n");
+  }
 
   s2 = "";
-  printf("%s-,%s-,%i-0,%i-0\n", s2.c_string(), s2.data(), s2.size(), s2.size());
-
-  s2 = nullptr;
-  printf("%s-,%s-,%i-0,%i-0\n", s2.c_string(), s2.data(), s2.size(), s2.size());
+  if (s2 != "", s2.size() != 0) {
+    printf("Error2\n");
+  }
 
   s1 = "0123456789";
-  printf("%s-3456\n", s1.sub_string_from_to(3, 6).c_string());
+  if (s1.sub_string(3, 4) != "3456") {
+    printf("Error3\n");
+  }
 
-  printf("OK.\n");
+  printf("string test OK.\n");
 
   return 0;
 }

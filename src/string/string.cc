@@ -1,5 +1,6 @@
 #include "string/string.h"
 
+#include <cstdio>
 #include <cstring>
 
 #include "utility/small_utility.h"
@@ -36,8 +37,13 @@ string &string::operator+=(char const c) {
 }
 
 string &string::operator+=(char const *const str) {
-  append(rhs);
- return *this;
+  append(str);
+  return *this;
+}
+
+string &string::operator+=(string const &s) {
+  append(s.data());
+  return *this;
 }
 
 string::~string() {
@@ -45,7 +51,6 @@ string::~string() {
 }
 
 char const string::operator[](int const index) const {
-  assert(index >= 0 && index < size_);
   return data_[index];
 }
 
@@ -116,8 +121,13 @@ void string::resize(int const size, char c) {
   size_ = size;
 }
 
+void insert(int const position, char const c) {
+  
+}
 
-// insert
+void insert(int const position, char const *const str) {
+
+}
 
 void string::erase(int const position, int const length) {
 }
@@ -135,9 +145,11 @@ string operator+(string const &lhs, char const *rhs) {
   return string(lhs) += rhs;
 }
 
+void print(string const &s) {
+  printf("The data of string:%s", s.data());
+}
 
-
-string string::sub_string_from_to(int const left_index,
+string string::sub_string(int const left_index,
                                   int const right_index) const {
   if (left_index < 0 || right_index > size_
       || right_index < left_index) {

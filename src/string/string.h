@@ -15,6 +15,7 @@ class string {
   string &operator=(char const *const rhs);
   string &operator+=(char const c);
   string &operator+=(char const *const str);
+  string &operator+=(string const &s);
   ~string();
 
   char const operator[](int const index) const;
@@ -34,13 +35,9 @@ class string {
   void erase(int const position, int const length);
   void clear();
 
-  int const find(char const c) const;
-  int const find(char const *const str) const;
-  int const find_from_to(char const c, int const left_index,
-                         int const right_index) const;
-  int const find_from_to(char const *const str, int const left_index,
-                         int const right_index) const;
-  string sub_string_from_to(int const left_index, int const right_index) const;
+  int const find(char const c, int const position = 0) const;
+  int const find(char const *const str, int const position = 0) const;
+  string sub_string(int const left_index, int const right_index) const;
 
   iterator begin() const { return data_; };
   iterator end() const { return data_ + size_; };
@@ -58,6 +55,8 @@ class string {
 
 string operator+(string const &lhs, char const *rhs);
 string operator+(char const *lhs, string const &rhs);
+
+void print(string const &s);
 
 }
 
