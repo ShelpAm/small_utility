@@ -1,6 +1,8 @@
 #if !defined SMALL_UTILITY_UTILITY_SMALL_UTILITY_H_
 #define SMALL_UTILITY_UTILITY_SMALL_UTILITY_H_
 
+#include "utility/small_utility.hpp"
+
 #if defined linux
 #include <time.h>
 #elif defined WIN32 // linux
