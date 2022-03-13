@@ -43,15 +43,22 @@ int main() {
   if (s1 != small_utility::string_stuff::string("to")) {
     error_codes.push_back(9);
   }
-  //s1.erase();
+  s1.insert("pq", 2);
+  if (s1 != "topq") {
+    error_codes.push_back(10);
+  }
+  s1.erase(1, 2);
+  if (s1 != "tq") {
+    error_codes.push_back(11);
+  }
   s1.clear();
   if (s1.find('i') != -1) {
-    error_codes.push_back(10);
+    error_codes.push_back(12);
   }
   s1 = "0123";
   temp = s1.sub_string_length(0, 4);
   if (s1 != temp) {
-    error_codes.push_back(11);
+    error_codes.push_back(13);
   }
 
   printf("string test OK.\n");

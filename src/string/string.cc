@@ -135,10 +135,29 @@ void string::insert(char const c, int const position) {
 }
 
 void string::insert(char const *const str, int const position) {
-
+  assert(position >= 0 && position <= size_);
+  int const str_length = strlen(str);
+  if (size_ + str_length > capacity_) {
+    reserve(size_ + str_length);
+  }
+  // make room for insertee.
+  for (int i = size_; i != position - 1; --i) {
+    data_[i + str_length] = data_[i];
+  }
+  memcpy(data_ + position, str, str_length);
+  size_ += str_length;
 }
 
 void string::erase(int const position, int const length) {
+  assert(position >= 0 && position <= size_);
+  assert(length >= 0);
+  if (length >= size_ - position + 1) {
+    data_[position] = '\0';
+    size_ = position;
+  } else {
+    memcpy(data_ + position, data_ + position + length, size_ - position + 1);
+    size_ -= length;
+  }
 }
 
 void string::clear() {
@@ -157,7 +176,13 @@ int const string::find(char const c, int const position) const {
 }
 
 int const string::find(char const *const str, int const position) const {
-
+  assert(position >= 0 && position <= size_);
+  char const *const sub_str = strstr(data_ + position, str);
+  if (sub_str) {
+    return sub_str - data_;
+  } else {
+    return -1;
+  }
 }
 
 string string::sub_string_length(int const left, int const length) const {

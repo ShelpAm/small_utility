@@ -36,10 +36,15 @@ class string {
   //  (*this)[position] will be 'c'.
   //
   // parameter:
-  //  $(position) - the index of $(c) to be specified to insert.
+  //  $(position) - the index of $(c) to be inserted
   //  $(c) - the char to be inserted
   void insert(char const c, int const position);
   void insert(char const *const str, int const position);
+
+  // brief:
+  //  Erase some characters, and fill them with the after characters.
+  // parameter:
+  //  $(position) - the index of place to be erased
   void erase(int const position, int const length);
   void clear();
 

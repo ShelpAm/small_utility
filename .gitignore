@@ -10,3 +10,4 @@ vs20*
 #vim cache
 *.un~
 *.swp
+*.swo
