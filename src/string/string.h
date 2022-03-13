@@ -30,14 +30,23 @@ class string {
 
   void reserve(int const size);
   void resize(int const size, char c = '\0');
-  void insert(int const position, char const c);
-  void insert(int const position, char const *const str);
+
+  // brief:
+  //  Insert a char $(c) at $(position). After calling this function,
+  //  (*this)[position] will be 'c'.
+  //
+  // parameter:
+  //  $(position) - the index of $(c) to be specified to insert.
+  //  $(c) - the char to be inserted
+  void insert(char const c, int const position);
+  void insert(char const *const str, int const position);
   void erase(int const position, int const length);
   void clear();
 
   int const find(char const c, int const position = 0) const;
   int const find(char const *const str, int const position = 0) const;
-  string sub_string(int const left_index, int const right_index) const;
+  string sub_string_length(int const left, int const length) const;
+  string sub_string_index(int const left, int const right) const;
 
   iterator begin() const { return data_; };
   iterator end() const { return data_ + size_; };

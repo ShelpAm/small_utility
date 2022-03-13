@@ -1,5 +1,6 @@
 #include "string/string.h"
 
+#include <cassert>
 #include <cstdio>
 #include <cstring>
 
@@ -121,11 +122,19 @@ void string::resize(int const size, char c) {
   size_ = size;
 }
 
-void insert(int const position, char const c) {
-  
+void string::insert(char const c, int const position) {
+  assert(position >= 0 && position <= size_);
+  if (equal(size_, capacity_)) {
+    reserve(capacity_ * 2);
+  }
+  for (int i = size_ + 1; i != position; --i) {
+    data_[i] = data_[i - 1];
+  }
+  data_[position] = c;
+  ++size_;
 }
 
-void insert(int const position, char const *const str) {
+void string::insert(char const *const str, int const position) {
 
 }
 
@@ -135,6 +144,32 @@ void string::erase(int const position, int const length) {
 void string::clear() {
   data_[0] = '\0';
   size_ = 0;
+}
+
+int const string::find(char const c, int const position) const {
+  assert(position >= 0 && position <= size_);
+  for (int i = position; i != size_; ++i) {
+    if (equal(data_[i], c)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+int const string::find(char const *const str, int const position) const {
+
+}
+
+string string::sub_string_length(int const left, int const length) const {
+  assert(left >= 0 && length > 0 && left + length <= size_);
+  char sub_str[length + 1];
+  memcpy(sub_str, data_ + left, length);
+  sub_str[length] = '\0';
+  return string(sub_str);
+}
+
+string string::sub_string_index(int const left, int const right) const {
+  return sub_string_length(left, right - left + 1);
 }
 
 string operator+(char const *lhs, string const &rhs) {
@@ -147,16 +182,6 @@ string operator+(string const &lhs, char const *rhs) {
 
 void print(string const &s) {
   printf("The data of string:%s", s.data());
-}
-
-string string::sub_string(int const left_index,
-                                  int const right_index) const {
-  if (left_index < 0 || right_index > size_
-      || right_index < left_index) {
-    return string();
-  }
-  printf("There is some problem in sub_string.");
-  return string();
 }
 
 }
