@@ -1,6 +1,11 @@
 #if !defined SMALL_UTILITY_REFERENCE_COUNTING_REFERENCE_COUNTED_POINTER_H_
 #define SMALL_UTILITY_REFERENCE_COUNTING_REFERENCE_COUNTED_POINTER_H_
 
+namespace small_utility {
+
+namespace reference_counting {
+  // TODO other files alse needs to add 'namespace'.
+
 template<typename type>
 class referece_counted_pointer<type> {
  public:
