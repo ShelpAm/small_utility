@@ -4,6 +4,16 @@
 template<typename type>
 class referece_counted_pointer<type> {
  public:
+  referece_counted_pointer<type>(reference_holder<type> *reference_holder);
+  referece_counted_pointer<type>(
+      referece_counted_pointer<type> const &referece_counted_pointer);
+
+  referece_counted_pointer<type> &operator=(
+      referece_counted_pointer<type> const &referece_counted_pointer);
+  referece_counted_pointer<type> &operator=(
+      referece_counted_pointer<type> const &referece_counted_pointer);
+
+  ~referece_counted_pointer<type>();
 
  private:
   reference_holder<type> *reference_holder_;
