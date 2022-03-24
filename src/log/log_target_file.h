@@ -12,7 +12,7 @@ class LogTargetFile : public LogTarget {
  public:
   virtual void Write(LogMessageInfo const &log_message_info);
  private:
-  file_stuff::FilePtr file_ptr_;
+  file_stuff::FilePointer file_ptr_;
 };
 
 }

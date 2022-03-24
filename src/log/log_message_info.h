@@ -15,13 +15,13 @@ class LogMessageInfo {
       char const *log_format, char const *content, char const *file_name,
       int const line, char const *function_name, time_stuff::time const &t,
       LogLevel const log_level);
-  string_stuff::String message() const { return message_; }
+  string_stuff::string message() const { return message_; }
  private:
   void ProcessMessageInfo(
       char const *log_format, char const *content, char const*file_name,
       int const line, char const *function_name, time_stuff::time const &t,
       LogLevel const log_level);
-  string_stuff::String message_;
+  string_stuff::string message_;
 };
 
 }

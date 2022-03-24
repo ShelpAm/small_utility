@@ -34,9 +34,8 @@ class string {
   // brief:
   //  Insert a char $(c) at $(position). After calling this function,
   //  (*this)[position] will be 'c'.
-  //
   // parameter:
-  //  $(position) - the index of $(c) to be inserted
+  //  $(position) - index of $(c) to be inserted
   //  $(c) - the char to be inserted
   void insert(char const c, int const position);
   void insert(char const *const str, int const position);

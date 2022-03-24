@@ -12,7 +12,7 @@ class time {
   time();
   time(int const year, int const month, int const day, int const hour,
        int const minute, int const second, int const millisecond);
-  time(tm const t);
+  time(tm const &t);
 
   void set_to_current_time();
  private:

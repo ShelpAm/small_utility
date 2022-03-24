@@ -1,5 +1,7 @@
 #include "time/time.h"
 
+//#include <>
+
 namespace small_utility {
 
 namespace time_stuff {
@@ -12,12 +14,13 @@ time::time(int const year, int const month, int const day, int const hour,
     : year_(year), month_(month), day_(day), hour_(hour),
       minute_(minute), second_(second), millisecond_(millisecond) {}
 
-time::time(tm const t)
+time::time(tm const &t)
     : year_(t.tm_year + 1900), month_(t.tm_mon + 1), day_(t.tm_mday),
       hour_(t.tm_hour), minute_(t.tm_min), second_(t.tm_sec), millisecond_(0)
 {}
 
 void time::set_to_current_time() {
+  //time_t
   //here -------------------------------
   //clock_gettime();
 }
