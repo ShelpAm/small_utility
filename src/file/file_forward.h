@@ -1,17 +1,17 @@
-#ifndef COMMAND_AND_DOMINATE_SRC_SMALL_UTILITY_FILE_FILE__FORWARD_H
-#define COMMAND_AND_DOMINATE_SRC_SMALL_UTILITY_FILE_FILE__FORWARD_H
+#if !defined SMALL_UTILITY_FILE_FILE_FORWARD_H
+#define SMALL_UTILITY_FILE_FILE_FORWARD_H
 
-#include <memory>
+#include "reference_counting/reference_counted_pointer.h"
 
 namespace small_utility {
 
 namespace file_stuff {
 
 class File;
-using FilePtr = std::shared_ptr<File>;
+using FilePointer = reference_counting::ReferenceCountedPointer<File>;
 
-}
+} // namespace file_stuff
 
-}
+} // namespace small_utility
 
-#endif // !COMMAND_AND_DOMINATE_SRC_SMALL_UTILITY_FILE_FILE__FORWARD_H
+#endif // !SMALL_UTILITY_FILE_FILE_FORWARD_H

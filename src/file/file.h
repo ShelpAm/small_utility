@@ -1,30 +1,31 @@
-#ifndef COMMAND_AND_DOMINATE_SRC_SMALL_UTILITY_FILE_FILE_H_
-#define COMMAND_AND_DOMINATE_SRC_SMALL_UTILITY_FILE_FILE_H_
+#if !defined SMALL_UTILITY_FILE_FILE_H_
+#define SMALL_UTILITY_FILE_FILE_H_
 
 #include "file/file_forward.h"
+
 #include <cstdio>
 
 namespace small_utility {
 
 namespace file_stuff {
 
-class File{
+class File {
  public:
-  static FilePtr Create(char const *file_name = nullptr);
-  File(char const *file_name);
+  File(char const *const file_name, bool const truncate = false);
   ~File();
 
-  void Open(char const *file_name);
-  void Append(char const *content) const;
-  void PrintFormat(char const *format, ...) const;
-  void Close();
+  // Prints something to file.
+  int const Print(char const *const content) const;
 
  private:
-  FILE* file_;
+  int const Open(char const *const file_name, bool const truncate);
+  int const Close() const;
+
+  FILE* file_ptr_;
 };
 
-}
+} // namespace file_stuff
 
-}
+} // namespace small_utility
 
-#endif // !COMMAND_AND_DOMINATE_SRC_SMALL_UTILITY_FILE_FILE_H_
+#endif // !SMALL_UTILITY_FILE_FILE_H_
