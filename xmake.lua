@@ -1,5 +1,5 @@
 set_project("small_utility")
-set_version("0.0.1", {build = "%Y%m%d%H%M"})
+set_version("0.0.2", {build = "%Y%m%d%H%M"})
 
 set_targetdir("$(projectdir)/build/")
 

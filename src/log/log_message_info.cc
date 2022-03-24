@@ -3,7 +3,7 @@
 #include <map>
 #include <sstream>
 
-#include "utility/small_utility.h"
+#include "utility/utility.h"
 #include "time/time.h"
 
 namespace small_utility {

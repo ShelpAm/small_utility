@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <cstring>
 
-#include "utility/small_utility.h"
+#include "utility/utility.h"
 
 namespace small_utility {
 
