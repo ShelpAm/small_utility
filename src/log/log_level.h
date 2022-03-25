@@ -5,7 +5,7 @@ namespace small_utility {
 
 namespace log_stuff {
 
-enum class LogLevel : int {
+enum LogLevel : int {
   kLogLevelDebug = 1,
   kLogLevelInfo,
   kLogLevelWarning,

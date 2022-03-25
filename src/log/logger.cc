@@ -1,10 +1,11 @@
 #include "log/logger.h"
 
 #include <cstdarg>
-#include <cstring>
-#include <ctime>
+//#include <cstring>
+#include <map>
 
-#include "file/file.h"
+#include "string/string.h"
+#include "utility/utility.h"
 
 namespace small_utility {
 
@@ -43,7 +44,7 @@ void Logger::PrintFormat(LogLevel const log_level, char const *format, ...) {
   va_list args;
   va_start(args, format);
   vsprintf(content, format, args);
-  va_end(args);
+  va_End(args);
 
   if (log_target_ == LogTarget::kLogTargetConsole) {
     printf(
@@ -59,47 +60,96 @@ void Logger::PrintFormat(LogLevel const log_level, char const *format, ...) {
 }
 */
 
+#undef ProcessLogMessageInfo(pattern, content, time, log_level, log_message)
+
+int const ProcessLogMessageInfo(
+    char const *const pattern, char const *const content, int const line,
+    char const *const file_name, char const *const function_name,
+    time_stuff::Time const &time, LogLevel const log_level,
+    string_stuff::String &log_message) {
+  string_stuff::String pattern_string(pattern);
+  string_stuff::String terminal_string;
+  string_stuff::String argument_name_string;
+  // Matches patterns with true string.
+  std::map<string_stuff::String, string_stuff::String> pattern_map;
+  pattern_map["content"] = content;
+  //pattern_map.Insert(std::make_pair("line", string(line)));
+  pattern_map["file_name"] = file_name;
+  pattern_map["function_name"] = function_name;
+  //pattern_map["time"] = time.ToString("$(year)-$(month)-$(day) $(hour):"
+  //                                    "$(minute):$(second)");
+  //pattern_map["log_level"] = log_level.to_string());
+  bool argument_flag = false;
+  string_stuff::String buffer_string;
+  for (int i = 0; i != pattern_string.Size(); ++i) {
+    if (argument_flag) {
+      if (utility::Unequal(pattern_string[i], ')')) {
+        argument_name_string.PushBack(pattern_string[i]);
+      } else {
+        // search for the value of key, argument_name_string_stream.
+        buffer_string = argument_name_string.CStr();
+        auto it = pattern_map.find(buffer_string);
+        terminal_string += utility::Equal(it, pattern_map.end()) ?
+                           "" : (*it).second;
+        argument_name_string.Clear();
+        argument_flag = false;
+      }
+      continue;
+    }
+    if (utility::Equal(pattern_string.SubStringLength(i, 2), "$(")) {
+      argument_flag = true;
+      ++i;
+    } else if (utility::Equal(pattern_string[i], '\\')) {
+      terminal_string.PushBack(pattern_string[i + 1]);
+      ++i;
+    } else {
+      terminal_string.PushBack(pattern_string[i]);
+    }
+  }
+  log_message = terminal_string.CStr();
+  return 0;
+}
+
 void ParseFunctionName(char *destination, char const *raw_function_name) {
-  strcpy(destination, "please finish this");
-  /*   UNFINISHED     */
+  // TODO
 }
 
 /*
-void Debug(char const *format, ...) {
-  va_list args;
-  va_start(args, format);
-  Logger::PrintFormat(LogLevel::kLogLevelDebug, format, args);
-  va_end(args);
-}
+   void Debug(char const *format, ...) {
+   va_list args;
+   va_start(args, format);
+   Logger::PrintFormat(LogLevel::kLogLevelDebug, format, args);
+   va_End(args);
+   }
 
-void Info(char const *format, ...) {
-  va_list args;
-  va_start(args, format);
-  Logger::PrintFormat(LogLevel::kLogLevelInfo, format, args);
-  va_end(args);
-}
+   void Info(char const *format, ...) {
+   va_list args;
+   va_start(args, format);
+   Logger::PrintFormat(LogLevel::kLogLevelInfo, format, args);
+   va_End(args);
+   }
 
-void Warning(char const *format, ...) {
-  va_list args;
-  va_start(args, format);
-  Logger::PrintFormat(LogLevel::kLogLevelWarning, format, args);
-  va_end(args);
-}
+   void Warning(char const *format, ...) {
+   va_list args;
+   va_start(args, format);
+   Logger::PrintFormat(LogLevel::kLogLevelWarning, format, args);
+   va_End(args);
+   }
 
-void Error(char const *format, ...) {
-  va_list args;
-  va_start(args, format);
-  Logger::PrintFormat(LogLevel::kLogLevelError, format, args);
-  va_end(args);
-}
+   void Error(char const *format, ...) {
+   va_list args;
+   va_start(args, format);
+   Logger::PrintFormat(LogLevel::kLogLevelError, format, args);
+   va_End(args);
+   }
 
-void Fatal(char const *format, ...) {
-  va_list args;
-  va_start(args, format);
-  Logger::PrintFormat(LogLevel::kLogLevelError, format, args);
-  va_end(args);
-}
-*/
+   void Fatal(char const *format, ...) {
+   va_list args;
+   va_start(args, format);
+   Logger::PrintFormat(LogLevel::kLogLevelError, format, args);
+   va_End(args);
+   }
+   */
 
 }
 

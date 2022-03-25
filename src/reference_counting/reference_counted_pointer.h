@@ -37,7 +37,7 @@ template<typename T>
 ReferenceCountedPointer<T>::ReferenceCountedPointer(
     ReferenceCountedPointer<T> const &rhs) {
   ReferenceCountedPointer<T> temp(rhs->ReferenceHolderPointer());
-  swap(temp);
+  Swap(temp);
 }
 
 template<typename T>
@@ -58,21 +58,21 @@ template<typename T>
 ReferenceCountedPointer<T> &ReferenceCountedPointer<T>::operator=(
     ReferenceCountedPointer<T> const &rhs) {
   ReferenceCountedPointer<T> temp(rhs->ReferenceHolder());
-  swap(temp);
+  Swap(temp);
 }
 
 template<typename T>
 ReferenceCountedPointer<T> &ReferenceCountedPointer<T>::operator=(
     ReferenceHolder<T> const *const reference_holder_pointer) {
   ReferenceCountedPointer<T> temp(reference_holder_pointer);
-  swap(temp);
+  Swap(temp);
 }
 
 template<typename T>
 ReferenceCountedPointer<T> &ReferenceCountedPointer<T>::operator=(
     T *const T_pointer) {
   ReferenceCountedPointer<T> temp(T_pointer);
-  swap(temp);
+  Swap(temp);
 }
 
 template<typename T>

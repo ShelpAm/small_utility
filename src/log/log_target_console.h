@@ -9,7 +9,7 @@ namespace log_stuff {
 
 class LogTargetConsole : public LogTarget {
  public:
-  virtual void Write(LogMessageInfo const &log_message_info);
+  virtual void Write(string_stuff::String const &log_message_info);
 };
 
 }

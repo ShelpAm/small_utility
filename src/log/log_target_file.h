@@ -10,9 +10,9 @@ namespace log_stuff {
 
 class LogTargetFile : public LogTarget {
  public:
-  virtual void Write(LogMessageInfo const &log_message_info);
+  virtual void Write(string_stuff::String const &log_message);
  private:
-  file_stuff::FilePointer file_ptr_;
+  file_stuff::FilePointer file_pointer_;
 };
 
 }

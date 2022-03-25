@@ -11,7 +11,7 @@ namespace log_stuff {
 class LogTargetBothFileAndConsole
     : public LogTargetFile, public LogTargetConsole {
  public:
-  virtual void Write(LogMessageInfo const &);
+  virtual void Write(string_stuff::String const &log_message);
 };
 
 }
