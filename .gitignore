@@ -11,3 +11,6 @@ vs20*
 *.un~
 *.swp
 *.swo
+
+# operator system cache
+core
