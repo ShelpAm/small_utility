@@ -32,11 +32,10 @@ int const PcloseLinux(FILE* file_ptr) {
 
 void SleepWindows(int const time) {
   if (time < 0) {
-    printf("[ERROR::small_utility::Sleep] The delay time is smaller"
-           "than 0, as big as %i.\n", time);
+    printf("[ERROR::small_utility::Sleep] The delay time (%i) is smaller"
+           "than 0.\n", time);
     return;
   }
-
   Sleep(time);
 }
 

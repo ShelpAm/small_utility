@@ -9,12 +9,11 @@
 # error No corresponding platform.
 #endif
 
-#include "log/logger_forward.h"
-
 #include <vector>
 
 #include "file/file.h"
 #include "log/log_level.h"
+#include "log/log_message_info.h"
 #include "log/log_target.h"
 #include "string/string.h"
 #include "time/time.h"
@@ -27,25 +26,23 @@ class Logger {
  public:
   static Logger &Instance();
 
-  void AddLogMessage(string_stuff::String const &log_message);
+  void AddLogMessage(LogMessageInfo const &log_message_info);
   void WriteToTarget(LogTarget const &log_target);
 
  private:
-  std::vector<string_stuff::String> log_messages_;
+  std::vector<LogMessageInfo> log_message_infos_;
   LogLevel minimum_log_level_;
 };
 
 int const ProcessLogMessageInfo(
       char const *const pattern, char const *const content, int const line,
       char const *const file_name, char const *const function_name,
-      time_stuff::Time const &time, LogLevel const log_level,
-      /* out */ string_stuff::String &log_message);
+      LogLevel const log_level,/* out */ string_stuff::String &log_message);
 
 #define \
-  ProcessLogMessageInfo(pattern, content, time, log_level, log_message) \
+  ProcessLogMessageInfo(pattern, content, log_level, log_message) \
   ProcessLogMessageInfo(pattern, content, __LINE__, __FILE__,\
-                        __SMALL_UTILITY_FUNCTION_NAME__, time, log_level,\
-                        log_message)
+                        __SMALL_UTILITY_FUNCTION_NAME__, log_level, log_message)
 
 
 //  destination: The output of this function. Its size_ shouldn't exceed

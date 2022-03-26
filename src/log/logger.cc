@@ -60,24 +60,24 @@ void Logger::PrintFormat(LogLevel const log_level, char const *format, ...) {
 }
 */
 
-#undef ProcessLogMessageInfo(pattern, content, time, log_level, log_message)
+#undef ProcessLogMessageInfo(pattern, content, log_level, log_message)
 
 int const ProcessLogMessageInfo(
     char const *const pattern, char const *const content, int const line,
     char const *const file_name, char const *const function_name,
-    time_stuff::Time const &time, LogLevel const log_level,
-    string_stuff::String &log_message) {
+    LogLevel const log_level, string_stuff::String &log_message) {
   string_stuff::String pattern_string(pattern);
   string_stuff::String buffer_string; // used to store argument name.
   // Matches patterns with true string.
   std::map<string_stuff::String, string_stuff::String> pattern_map;
   pattern_map["content"] = content;
-  //pattern_map["line"] = string_stuff::ToString(line);
+  pattern_map["line"] = string_stuff::String(line);
   pattern_map["file_name"] = file_name;
-  pattern_map["function_name"] = function_name;
-  //pattern_map["time"] = time.ToString("$(year)-$(month)-$(day) $(hour):"
-  //                                    "$(minute):$(second)");
-  //pattern_map["log_level"] = string_stuff::ToString(log_level);
+  ParseFunctionName(function_name, pattern_map["function_name"]);
+  pattern_map["time"] =
+    string_stuff::String(time_stuff::Time().SetToCurrentTime(),
+                         "$(year)-$(month)-$(day) $(hour):$(minute):$(second)");
+  pattern_map["log_level"] = string_stuff::String(log_level);
   std::map<string_stuff::String, string_stuff::String>::iterator it;
 
   for (int i = 0; i != pattern_string.Size(); ) {
@@ -110,7 +110,7 @@ void ParseFunctionName(char const *const raw_function_name,
                        string_stuff::String &destiniation) {
   string_stuff::String source_function_name(raw_function_name);
   destiniation = source_function_name.SubStringIndex(
-      source_function_name.Find(' '), source_function_name.Size() - 1);
+      source_function_name.Find(' ') + 1, source_function_name.Size() - 1);
 }
 
 /*

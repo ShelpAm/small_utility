@@ -15,7 +15,32 @@ String::String(char const *const rhs) : size_(strlen(rhs)), capacity_(size_) {
   memcpy(data_, rhs, size_ + 1);
 }
 
-String::String(String const &rhs) : data_(nullptr), size_(0), capacity_(0) {
+String::String(int const integer) : data_(nullptr) {
+  char buffer[11];
+  sprintf(buffer, "%i", integer);
+  String temp(buffer);
+  Swap(temp);
+}
+
+String::String(log_stuff::LogLevel const log_level) : data_(nullptr) {
+  String temp;
+  using namespace log_stuff;
+  if (utility::Equal(log_level, LogLevel::kLogLevelDebug)) { temp = "DEBUG"; }
+  else
+  if (utility::Equal(log_level, LogLevel::kLogLevelInfo)) { temp = "INFO"; }
+  else
+  if (utility::Equal(log_level, LogLevel::kLogLevelWarn)) { temp = "WARN"; }
+  else
+  if (utility::Equal(log_level, LogLevel::kLogLevelError)) { temp = "ERROR"; }
+  else
+  if (utility::Equal(log_level, LogLevel::kLogLevelFatal)) { temp = "FATAL"; }
+  Swap(temp);
+}
+
+// TODO(small_sheep_ email:1178550325@qq.com): unfinished constructor.
+String::String(time_stuff::Time const &time, char const *const pattern) : String() {}
+
+String::String(String const &rhs) : data_(nullptr) {
   String temp(rhs.Data());
   Swap(temp);
 }

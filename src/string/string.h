@@ -1,6 +1,9 @@
 #ifndef SMALL_UTILITY_SRC_STRING_STRING_H_
 #define SMALL_UTILITY_SRC_STRING_STRING_H_
 
+#include "time/time_forward.h"
+#include "log/log_level.h"
+
 namespace small_utility {
 
 namespace string_stuff {
@@ -10,6 +13,9 @@ class String {
   using ConstIterator = char const *;
  public:
   String(char const *const rhs = "");
+  String(int const integer);
+  String(log_stuff::LogLevel const log_level);
+  String(time_stuff::Time const &time, char const *const pattern);
   String(String const &rhs);
   String &operator=(String rhs);
   String &operator=(char const *const rhs);

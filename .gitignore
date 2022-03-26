@@ -3,6 +3,7 @@
 build/
 .deps/
 vs20*
+cmake/
 
 # MacOS Cache
 .DS_Store
@@ -12,5 +13,8 @@ vs20*
 *.swp
 *.swo
 
-# operator system cache
+# linux cache
 core
+
+# temporary
+*.tmp

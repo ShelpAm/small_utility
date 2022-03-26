@@ -8,7 +8,7 @@ namespace log_stuff {
 enum LogLevel : int {
   kLogLevelDebug = 1,
   kLogLevelInfo,
-  kLogLevelWarning,
+  kLogLevelWarn,
   kLogLevelError,
   kLogLevelFatal
 };
