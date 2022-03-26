@@ -10,19 +10,18 @@ namespace small_utility {
 
 namespace string_stuff {
 
-String::String(String const &rhs) : data_(nullptr) {
-  String temp(rhs.Data());
-  Swap(temp);
-}
-
 String::String(char const *const rhs) : size_(strlen(rhs)), capacity_(size_) {
   data_ = new char[size_ + 1];
   memcpy(data_, rhs, size_ + 1);
 }
 
-String &String::operator=(String const &rhs) {
+String::String(String const &rhs) : data_(nullptr), size_(0), capacity_(0) {
   String temp(rhs.Data());
   Swap(temp);
+}
+
+String &String::operator=(String rhs) {
+  Swap(rhs);
   return *this;
 }
 
@@ -42,13 +41,14 @@ String &String::operator+=(char const *const str) {
   return *this;
 }
 
-String &String::operator+=(String const &s) {
-  Append(s.Data());
+String &String::operator+=(String const &string) {
+  Append(string.Data());
   return *this;
 }
 
 String::~String() {
   delete[] data_;
+  data_ = nullptr;
 }
 
 char const String::operator[](int const index) const {
@@ -64,7 +64,7 @@ void String::Swap(String &rhs) {
 
 void String::PushBack(char const c) {
   if (utility::Equal(size_, capacity_)) {
-    Reserve(capacity_ ? capacity_ * 2 : 1);
+    Reserve(capacity_ ? capacity_ * 2 : 4);
   }
   data_[size_] = c;
   data_[size_ + 1] = '\0';
@@ -85,7 +85,7 @@ void String::Reserve(int const size) {
   if (size <= size_) {
     return;
   }
-  char *new_data = new char[size_ + 1];
+  char *new_data = new char[size + 1];
   memcpy(new_data, data_, size_);
   delete[] data_;
   data_ = new_data;
@@ -110,7 +110,7 @@ void String::Resize(int const size, char c) {
 void String::Insert(char const c, int const position) {
   assert(position >= 0 && position <= size_);
   if (utility::Equal(size_, capacity_)) {
-    Reserve(capacity_ * 2);
+    Reserve(capacity_ ? capacity_ * 2 : 4);
   }
   for (int i = size_ + 1; i != position; --i) {
     data_[i] = data_[i - 1];
@@ -171,14 +171,19 @@ int const String::Find(char const *const str, int const position) const {
 }
 
 String String::SubStringLength(int const left, int const length) const {
-  assert(left >= 0 && length > 0 && left + length - 1 <= size_);
-  char sub_str[length + 1];
-  memcpy(sub_str, data_ + left, length);
-  sub_str[length] = '\0';
-  return String(sub_str);
+  assert(left >= 0);
+  assert(length > 0);
+  assert(left + length <= size_);
+  char *buffer = new char[length + 1];
+  memcpy(buffer, data_ + left, length);
+  buffer[length] = '\0';
+  String string(buffer);
+  delete[] buffer;
+  return string;
 }
 
 String String::SubStringIndex(int const left, int const right) const {
+  assert(left <= right);
   return SubStringLength(left, right - left + 1);
 }
 
@@ -239,7 +244,7 @@ bool const operator!=(String const &lhs, String const &rhs) {
 }
 
 void Print(String const &s) {
-  printf("The data_ of string:%s", s.Data());
+  printf("The data_ of string:\"%s\"\n", s.Data());
 }
 
 }

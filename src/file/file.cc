@@ -27,7 +27,7 @@ int const File::Print(char const *const content) const {
 }
 
 int const File::Open(char const *const file_name, bool const truncate) {
-  char *str;
+  char const *str;
   if (truncate) { str = "wb+"; }
   else { str = "ab+"; }
 

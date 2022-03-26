@@ -68,50 +68,49 @@ int const ProcessLogMessageInfo(
     time_stuff::Time const &time, LogLevel const log_level,
     string_stuff::String &log_message) {
   string_stuff::String pattern_string(pattern);
-  string_stuff::String terminal_string;
-  string_stuff::String argument_name_string;
+  string_stuff::String buffer_string; // used to store argument name.
   // Matches patterns with true string.
   std::map<string_stuff::String, string_stuff::String> pattern_map;
   pattern_map["content"] = content;
-  //pattern_map.Insert(std::make_pair("line", string(line)));
+  //pattern_map["line"] = string_stuff::ToString(line);
   pattern_map["file_name"] = file_name;
   pattern_map["function_name"] = function_name;
   //pattern_map["time"] = time.ToString("$(year)-$(month)-$(day) $(hour):"
   //                                    "$(minute):$(second)");
-  //pattern_map["log_level"] = log_level.to_string());
-  bool argument_flag = false;
-  string_stuff::String buffer_string;
-  for (int i = 0; i != pattern_string.Size(); ++i) {
-    if (argument_flag) {
-      if (utility::Unequal(pattern_string[i], ')')) {
-        argument_name_string.PushBack(pattern_string[i]);
-      } else {
-        // search for the value of key, argument_name_string_stream.
-        buffer_string = argument_name_string.CStr();
-        auto it = pattern_map.find(buffer_string);
-        terminal_string += utility::Equal(it, pattern_map.end()) ?
-                           "" : (*it).second;
-        argument_name_string.Clear();
-        argument_flag = false;
-      }
-      continue;
+  //pattern_map["log_level"] = string_stuff::ToString(log_level);
+  std::map<string_stuff::String, string_stuff::String>::iterator it;
+
+  for (int i = 0; i != pattern_string.Size(); ) {
+    int left_position = pattern_string.Find("$(", i);
+    if (utility::Equal(left_position, -1)) {
+      log_message += pattern_string.SubStringIndex(i, pattern_string.Size()-1);
+      break;
     }
-    if (utility::Equal(pattern_string.SubStringLength(i, 2), "$(")) {
-      argument_flag = true;
-      ++i;
-    } else if (utility::Equal(pattern_string[i], '\\')) {
-      terminal_string.PushBack(pattern_string[i + 1]);
-      ++i;
-    } else {
-      terminal_string.PushBack(pattern_string[i]);
+    int right_position = pattern_string.Find(")", left_position);
+    if (utility::Equal(right_position, -1)) {
+      log_message += pattern_string.SubStringIndex(left_position + 2,
+                                                   pattern_string.Size() - 1);
+      break;
     }
+    if (left_position > i) {
+      log_message += pattern_string.SubStringIndex(i, left_position - 1);
+    }
+    i = right_position + 1;
+    buffer_string = pattern_string.SubStringIndex(left_position + 2,
+                                                  right_position - 1);
+    it = pattern_map.find(buffer_string);
+    buffer_string = utility::Equal(it, pattern_map.end()) ?  "" : (*it).second;
+    log_message += buffer_string;
   }
-  log_message = terminal_string.CStr();
+
   return 0;
 }
 
-void ParseFunctionName(char *destination, char const *raw_function_name) {
-  // TODO
+void ParseFunctionName(char const *const raw_function_name,
+                       string_stuff::String &destiniation) {
+  string_stuff::String source_function_name(raw_function_name);
+  destiniation = source_function_name.SubStringIndex(
+      source_function_name.Find(' '), source_function_name.Size() - 1);
 }
 
 /*

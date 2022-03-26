@@ -9,13 +9,13 @@ class String {
   using Iterator = char *;
   using ConstIterator = char const *;
  public:
-  String(String const &rhs);
   String(char const *const rhs = "");
-  String &operator=(String const &rhs);
+  String(String const &rhs);
+  String &operator=(String rhs);
   String &operator=(char const *const rhs);
   String &operator+=(char const c);
   String &operator+=(char const *const str);
-  String &operator+=(String const &s);
+  String &operator+=(String const &string);
   ~String();
 
   char const operator[](int const index) const;
@@ -25,6 +25,9 @@ class String {
   void Append(char const *const str);
 
   void Reserve(int const size);
+  // Resizes the data_.
+  //  If size is less than size_, the data from data_[size] will be truncated.
+  //  If size is larger than size_, the extra room will be filled with c.
   void Resize(int const size, char c = '\0');
 
   //  Inserts a char $(c) at $(position). After calling this function,

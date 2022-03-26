@@ -16,6 +16,7 @@
 #include "file/file.h"
 #include "log/log_level.h"
 #include "log/log_target.h"
+#include "string/string.h"
 #include "time/time.h"
 
 namespace small_utility {
@@ -50,7 +51,8 @@ int const ProcessLogMessageInfo(
 //  destination: The output of this function. Its size_ shouldn't exceed
 //    max_function_name_size_.
 //  raw_function_name: The string from __PRETTY_FUNCTION__.
-void ParseFunctionName(char *destination, char const *raw_function_name);
+void ParseFunctionName(char const *const raw_function_name,
+                       string_stuff::String &destination);
 
 void Debug(char const *format, ...);
 void Info(char const *format, ...);
@@ -58,8 +60,8 @@ void Warning(char const *format, ...);
 void Error(char const *format, ...);
 void Fatal(char const *format, ...);
 
-}
+} // namespace log_stuff
 
-}
+} // namespace small_utility
 
 #endif // !SMALL_UTILITY_LOG_LOGGER_H_
