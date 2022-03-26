@@ -8,7 +8,7 @@ int main() {
   string_stuff::String message;
   time_stuff::Time time; time.SetToCurrentTime();
   log_stuff::ProcessLogMessageInfo(
-      "$(time) $(log_level) $(file_name):$(line) in $(function_name): $(ontent)\n",
+      "[$(time)] $(log_level) $(file_name):$(line) in $(function_name): $(ontent)\n",
       //"$(function_name) $(file_name)",
       "test_", time, log_stuff::LogLevel::kLogLevelInfo, message);
 
