@@ -38,6 +38,19 @@ int main() {
   if (s1 != temp) { error_codes.push_back(13); }
   string_stuff::String clear_s("123");
   clear_s.Clear();
+  if (clear_s != "") { error_codes.push_back(14); }
+
+  string_stuff::String s_replace("123456789");
+  s_replace.Replace("456", "123");
+  s_replace.Replace("123", "456");
+  s_replace.Replace("789", "444");
+  s_replace.Replace("123", "333");
+  if (s_replace != "456333444") { error_codes.push_back(15); }
+
+  string_stuff::String s_plus1("plus1"), s_plus2("plus2"),
+                       s_plus3(s_plus1 + s_plus2);
+  if ((s_plus1 += s_plus2) != s_plus3) { error_codes.push_back(16); }
+  
 
   error_codes.push_back(0);
   for (auto const i : error_codes) {

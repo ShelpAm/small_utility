@@ -1,9 +1,12 @@
+// Copyright 2022 small_sheep_
+
 #include "string/string.h"
 
 #include <cassert>
 #include <cstdio>
 #include <cstring>
 
+#include "time/time.h"
 #include "utility/utility.h"
 
 namespace small_utility {
@@ -11,37 +14,46 @@ namespace small_utility {
 namespace string_stuff {
 
 String::String(char const *const rhs) : size_(strlen(rhs)), capacity_(size_) {
+  assert(rhs);
   data_ = new char[size_ + 1];
   memcpy(data_, rhs, size_ + 1);
 }
 
 String::String(int const integer) : data_(nullptr) {
   char buffer[11];
-  sprintf(buffer, "%i", integer);
+  snprintf(buffer, sizeof(buffer), "%i", integer);
   String temp(buffer);
   Swap(temp);
 }
 
 String::String(log_stuff::LogLevel const log_level) : data_(nullptr) {
   String temp;
-  using namespace log_stuff;
-  if (utility::Equal(log_level, LogLevel::kLogLevelDebug)) { temp = "DEBUG"; }
-  else
-  if (utility::Equal(log_level, LogLevel::kLogLevelInfo)) { temp = "INFO"; }
-  else
-  if (utility::Equal(log_level, LogLevel::kLogLevelWarn)) { temp = "WARN"; }
-  else
-  if (utility::Equal(log_level, LogLevel::kLogLevelError)) { temp = "ERROR"; }
-  else
-  if (utility::Equal(log_level, LogLevel::kLogLevelFatal)) { temp = "FATAL"; }
+  switch (log_level) {
+    case log_stuff::LogLevel::kLogLevelDebug: temp = "DEBUG"; break;
+    case log_stuff::LogLevel::kLogLevelInfo: temp = "INFO"; break;
+    case log_stuff::LogLevel::kLogLevelWarn: temp = "WARN"; break;
+    case log_stuff::LogLevel::kLogLevelError: temp = "ERROR"; break;
+    case log_stuff::LogLevel::kLogLevelFatal: temp = "FATAL"; break;
+    default: temp = "INVALID_LOG_LEVEL"; break;
+  }
   Swap(temp);
 }
 
 // TODO(small_sheep_ email:1178550325@qq.com): unfinished constructor.
-String::String(time_stuff::Time const &time, char const *const pattern) : String() {}
+String::String(time_stuff::Time const &time, char const *const pattern)
+    : data_(nullptr) {
+  String string_pattern(pattern);
+  string_pattern.Replace("$(year)", String(time.Year()).CStr());
+  string_pattern.Replace("$(month)", String(time.Month()).CStr());
+  string_pattern.Replace("$(day)", String(time.Day()).CStr());
+  string_pattern.Replace("$(hour)", String(time.Hour()).CStr());
+  string_pattern.Replace("$(minute)", String(time.Minute()).CStr());
+  string_pattern.Replace("$(second)", String(time.Second()).CStr());
+  Swap(string_pattern);
+}
 
 String::String(String const &rhs) : data_(nullptr) {
-  String temp(rhs.Data());
+  String temp(rhs.ConstData());
   Swap(temp);
 }
 
@@ -66,8 +78,8 @@ String &String::operator+=(char const *const str) {
   return *this;
 }
 
-String &String::operator+=(String const &string) {
-  Append(string.Data());
+String &String::operator+=(String const &s) {
+  Append(s.ConstData());
   return *this;
 }
 
@@ -76,7 +88,13 @@ String::~String() {
   data_ = nullptr;
 }
 
-char const String::operator[](int const index) const {
+
+char &String::operator[](int const index) {
+  assert(index >= 0); assert(index < size_);
+  return data_[index];
+}
+
+char String::operator[](int const index) const {
   assert(index >= 0); assert(index < size_);
   return data_[index];
 }
@@ -97,13 +115,14 @@ void String::PushBack(char const c) {
 }
 
 void String::Append(char const *const str) {
-  const int str_length = strlen(str);
-  const int adds_up_length = str_length + size_;
-  if(adds_up_length >= capacity_) {
-    Reserve(adds_up_length * 2);
+  int const length_str = strlen(str);
+  int const  length_add_up = length_str + size_;
+  if (length_add_up >= capacity_) {
+    Reserve(length_add_up * 2);
   }
-  memcpy(data_ + size_, str, str_length);
-  size_ += str_length;
+  memcpy(data_ + size_, str, length_str);
+  data_[length_add_up] = '\0';
+  size_ += length_str;
 }
 
 void String::Reserve(int const size) {
@@ -129,7 +148,7 @@ void String::Resize(int const size, char c) {
     }
     data_[size] = '\0';
   }
-  size_ = size_;
+  size_ = size;
 }
 
 void String::Insert(char const c, int const position) {
@@ -175,7 +194,7 @@ void String::Clear() {
   size_ = 0;
 }
 
-int const String::Find(char const c, int const position) const {
+int String::Find(char const c, int const position) const {
   assert(position >= 0 && position <= size_);
   for (int i = position; i != size_; ++i) {
     if (utility::Equal(data_[i], c)) {
@@ -185,7 +204,7 @@ int const String::Find(char const c, int const position) const {
   return -1;
 }
 
-int const String::Find(char const *const str, int const position) const {
+int String::Find(char const *const str, int const position) const {
   assert(position >= 0 && position <= size_);
   char const *const sub_str = strstr(data_ + position, str);
   if (sub_str) {
@@ -195,16 +214,46 @@ int const String::Find(char const *const str, int const position) const {
   }
 }
 
+int String::Replace(char const from, char const to, int const position) {
+  int pos = Find(from, position);
+  if (utility::Equal(pos, -1)) {
+    return -1;
+  }
+  data_[pos] = position;
+  return pos;
+}
+
+int String::Replace(char const *const from, char const *const to,
+              int const position) {
+  int pos = Find(from, position);
+  if (utility::Equal(pos, -1)) {
+    return -1;
+  }
+  //String temp(SubStringLength(0, pos));
+  //temp += String(to);
+  int position_last = pos + strlen(from);
+  String temp(SubStringLength(0, pos));
+  (temp += to) += SubStringLength(pos + strlen(from), size_ - position_last);
+  Swap(temp);
+  return pos;
+}
+
 String String::SubStringLength(int const left, int const length) const {
   assert(left >= 0);
-  assert(length > 0);
+  assert(length >= 0);
   assert(left + length <= size_);
-  char *buffer = new char[length + 1];
-  memcpy(buffer, data_ + left, length);
-  buffer[length] = '\0';
-  String string(buffer);
-  delete[] buffer;
-  return string;
+  //----DEPRECATED----
+  //char *buffer = new char[length + 1];
+  //memcpy(buffer, data_ + left, length);
+  //buffer[length] = '\0';
+  //String return_string(buffer);
+  //delete[] buffer;
+  String string_return;
+  string_return.Reserve(length);
+  memcpy(string_return.Data(), data_ + left, length);
+  string_return.Data()[length] = '\0';
+  string_return.size_ = length;
+  return string_return;
 }
 
 String String::SubStringIndex(int const left, int const right) const {
@@ -212,66 +261,70 @@ String String::SubStringIndex(int const left, int const right) const {
   return SubStringLength(left, right - left + 1);
 }
 
-String operator+(char const *lhs, String const &rhs) {
+String const operator+(String const &lhs, String const &rhs) {
   return String(lhs) += rhs;
 }
 
-String operator+(String const &lhs, char const *rhs) {
+String const operator+(char const *const lhs, String const &rhs) {
   return String(lhs) += rhs;
 }
 
-bool const operator<(char const *lhs, String const &rhs) {
-  return strcmp(lhs, rhs.Data()) < 0;
+String const operator+(String const &lhs, char const *const rhs) {
+  return String(lhs) += rhs;
 }
 
-bool const operator<(String const &lhs, char const *const rhs) {
-  return strcmp(lhs.Data(), rhs) < 0;
+bool operator<(char const *const lhs, String const &rhs) {
+  return strcmp(lhs, rhs.ConstData()) < 0;
 }
 
-bool const operator<(String const &lhs, String const &rhs) {
-  return strcmp(lhs.Data(), rhs.Data()) < 0;
+bool operator<(String const &lhs, char const *const rhs) {
+  return strcmp(lhs.ConstData(), rhs) < 0;
 }
 
-bool const operator>(char const *lhs, String const &rhs) {
-  return strcmp(lhs, rhs.Data()) > 0;
+bool operator<(String const &lhs, String const &rhs) {
+  return strcmp(lhs.ConstData(), rhs.ConstData()) < 0;
 }
 
-bool const operator>(String const &lhs, char const *const rhs) {
-  return strcmp(lhs.Data(), rhs) > 0;
+bool operator>(char const *const lhs, String const &rhs) {
+  return strcmp(lhs, rhs.ConstData()) > 0;
 }
 
-bool const operator>(String const &lhs, String const &rhs) {
-  return strcmp(lhs.Data(), rhs.Data()) > 0;
+bool operator>(String const &lhs, char const *const rhs) {
+  return strcmp(lhs.ConstData(), rhs) > 0;
 }
 
-bool const operator==(char const *lhs, String const &rhs) {
-  return !strcmp(lhs, rhs.Data());
+bool operator>(String const &lhs, String const &rhs) {
+  return strcmp(lhs.ConstData(), rhs.ConstData()) > 0;
 }
 
-bool const operator==(String const &lhs, char const *const rhs) {
-  return !strcmp(lhs.Data(), rhs);
+bool operator==(char const *const lhs, String const &rhs) {
+  return !strcmp(lhs, rhs.ConstData());
 }
 
-bool const operator==(String const &lhs, String const &rhs) {
-  return !strcmp(lhs.Data(), rhs.Data());
+bool operator==(String const &lhs, char const *const rhs) {
+  return !strcmp(lhs.ConstData(), rhs);
 }
 
-bool const operator!=(char const *lhs, String const &rhs) {
-  return strcmp(lhs, rhs.Data());
+bool operator==(String const &lhs, String const &rhs) {
+  return !strcmp(lhs.ConstData(), rhs.ConstData());
 }
 
-bool const operator!=(String const &lhs, char const *const rhs) {
-  return strcmp(lhs.Data(), rhs);
+bool operator!=(char const *const lhs, String const &rhs) {
+  return strcmp(lhs, rhs.ConstData());
 }
 
-bool const operator!=(String const &lhs, String const &rhs) {
-  return strcmp(lhs.Data(), rhs.Data());
+bool operator!=(String const &lhs, char const *const rhs) {
+  return strcmp(lhs.ConstData(), rhs);
+}
+
+bool operator!=(String const &lhs, String const &rhs) {
+  return strcmp(lhs.ConstData(), rhs.ConstData());
 }
 
 void Print(String const &s) {
-  printf("The data_ of string:\"%s\"\n", s.Data());
+  printf("The data_ of string:\"%s\"\n", s.ConstData());
 }
 
-}
+}  // namespace string_stuff
 
-}
+}  // namespace small_utility

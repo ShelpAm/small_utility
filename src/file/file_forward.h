@@ -1,4 +1,6 @@
-#if !defined SMALL_UTILITY_FILE_FILE_FORWARD_H
+// Copyright 2022 small_sheep_
+
+#ifndef SMALL_UTILITY_FILE_FILE_FORWARD_H
 #define SMALL_UTILITY_FILE_FILE_FORWARD_H
 
 #include "reference_counting/reference_counted_pointer.h"
@@ -10,8 +12,8 @@ namespace file_stuff {
 class File;
 using FilePointer = reference_counting::ReferenceCountedPointer<File>;
 
-} // namespace file_stuff
+}  // namespace file_stuff
 
-} // namespace small_utility
+}  // namespace small_utility
 
-#endif // !SMALL_UTILITY_FILE_FILE_FORWARD_H
+#endif  // SMALL_UTILITY_FILE_FILE_FORWARD_H

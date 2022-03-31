@@ -16,8 +16,7 @@ Time::Time(int const year, int const month, int const day, int const hour,
 
 Time::Time(tm const &t)
     : year_(t.tm_year + 1900), month_(t.tm_mon + 1), day_(t.tm_mday),
-      hour_(t.tm_hour), minute_(t.tm_min), second_(t.tm_sec), millisecond_(0)
-{}
+      hour_(t.tm_hour), minute_(t.tm_min), second_(t.tm_sec), millisecond_(0) {}
 
 Time const &Time::SetToCurrentTime() {
   //Time_t

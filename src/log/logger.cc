@@ -70,9 +70,9 @@ int const ProcessLogMessageInfo(
   string_stuff::String buffer_string; // used to store argument name.
   // Matches patterns with true string.
   std::map<string_stuff::String, string_stuff::String> pattern_map;
-  pattern_map["content"] = content;
+  pattern_map["content"] = string_stuff::String(content);
   pattern_map["line"] = string_stuff::String(line);
-  pattern_map["file_name"] = file_name;
+  pattern_map["file_name"] = string_stuff::String(file_name);
   ParseFunctionName(function_name, pattern_map["function_name"]);
   pattern_map["time"] =
     string_stuff::String(time_stuff::Time().SetToCurrentTime(),
