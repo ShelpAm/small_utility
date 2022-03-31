@@ -2,6 +2,8 @@
 #define SMALL_UTILITY_TIME_TIME_H_
 
 #include <ctime>
+#include <time.h>
+#include "macro/macro.h"
 
 namespace small_utility {
 
@@ -13,8 +15,17 @@ class Time {
   Time(int const year, int const month, int const day, int const hour,
        int const minute, int const second, int const millisecond);
   Time(tm const &t);
+  Time(tm const *t);
+  Time(Time const &t);
+  Time &operator=(tm const *t);
 
-  Time const &SetToCurrentTime();
+#if defined SMALL_UTILITY_LINUX
+#define SetToCurrentTime() SetToCurrentTimeLinux()
+  Time const &SetToCurrentTimeLinux();
+#elif defined SMALL_UTILITY_WINDOWS
+#define SetToCurrentTime() SetToCurrentTimeWindows()
+  Time const &SetToCurrentTimeWindows();
+#endif
 
   int const Year() const { return year_; }
   int const Month() const { return month_; }
@@ -24,6 +35,8 @@ class Time {
   int const Second() const { return second_; }
   int const Millisecond() const { return millisecond_; }
  private:
+  void Swap(Time &rhs);
+
   int year_, month_, day_, hour_, minute_, second_, millisecond_;
 };
 

@@ -2,29 +2,16 @@
 #define SMALL_UTILITY_UTILITY_UTILITY_H_
 
 #include <cstdio>
-
-#if defined __linux__
-# define SMALL_UTILITY_LINUX
+#include "macro/macro.h"
+#if defined SMALL_UTILITY_LINUX
 # include <time.h>
-#elif defined _WIN32 // __linux__
-# define SMALL_UTILITY_WINDOWS
+#elif defined SMALL_UTILITY_WINDOWS
 # include <windows.h>
-#else
-# error no_corresponding_platform
 #endif // _WIN32
 
 namespace small_utility {
 
 namespace utility {
-
-// The unit of this function is millisecond.
-void SleepLinux (int const time);
-void SleepWindows (int const time);
-
-FILE *PopenLinux(char const *command, char const *type);
-FILE *PopenWindows(char const *command, char const *type);
-int const PcloseLinux(FILE* file_ptr);
-int const PcloseWindows(FILE* file_ptr);
 
 #if defined SMALL_UTILITY_LINUX
 
@@ -38,10 +25,16 @@ int const PcloseWindows(FILE* file_ptr);
 #define Popen(command, type)            PopenWindows(command, type)
 #define Pclose(file_ptr)                PcloseWindows(file_ptr)
 
-#else
-# error no_corresponding_platform
 #endif
 
+// The unit of this function is millisecond.
+void SleepLinux (int const time);
+void SleepWindows (int const time);
+
+FILE *PopenLinux(char const *command, char const *type);
+FILE *PopenWindows(char const *command, char const *type);
+int const PcloseLinux(FILE* file_ptr);
+int const PcloseWindows(FILE* file_ptr);
 
 template<typename type>
 inline void Swap(type &lhs, type &rhs) {

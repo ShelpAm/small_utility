@@ -19,9 +19,11 @@ String::String(char const *const rhs) : size_(strlen(rhs)), capacity_(size_) {
   memcpy(data_, rhs, size_ + 1);
 }
 
-String::String(int const integer) : data_(nullptr) {
+String::String(int const integer, char const *const padding) : data_(nullptr) {
   char buffer[11];
-  snprintf(buffer, sizeof(buffer), "%i", integer);
+  String format("%");
+  (format += padding) += 'i';
+  snprintf(buffer, sizeof(buffer), /*"%i"*/format.ConstData(), integer);
   String temp(buffer);
   Swap(temp);
 }
@@ -39,16 +41,15 @@ String::String(log_stuff::LogLevel const log_level) : data_(nullptr) {
   Swap(temp);
 }
 
-// TODO(small_sheep_ email:1178550325@qq.com): unfinished constructor.
 String::String(time_stuff::Time const &time, char const *const pattern)
     : data_(nullptr) {
   String string_pattern(pattern);
-  string_pattern.Replace("$(year)", String(time.Year()).CStr());
-  string_pattern.Replace("$(month)", String(time.Month()).CStr());
-  string_pattern.Replace("$(day)", String(time.Day()).CStr());
-  string_pattern.Replace("$(hour)", String(time.Hour()).CStr());
-  string_pattern.Replace("$(minute)", String(time.Minute()).CStr());
-  string_pattern.Replace("$(second)", String(time.Second()).CStr());
+  string_pattern.Replace("$(year)", String(time.Year(), "04").CStr());
+  string_pattern.Replace("$(month)", String(time.Month(), "02").CStr());
+  string_pattern.Replace("$(day)", String(time.Day(), "02").CStr());
+  string_pattern.Replace("$(hour)", String(time.Hour(), "02").CStr());
+  string_pattern.Replace("$(minute)", String(time.Minute(), "02").CStr());
+  string_pattern.Replace("$(second)", String(time.Second(), "02").CStr());
   Swap(string_pattern);
 }
 

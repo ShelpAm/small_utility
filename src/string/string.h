@@ -17,7 +17,9 @@ class String {
 
  public:
   String(char const *const rhs = "");
-  explicit String(int const integer);
+
+  // The padding argument is for snprintf.
+  explicit String(int const integer, char const *const padding = "00");
   explicit String(log_stuff::LogLevel const log_level);
   String(time_stuff::Time const &time, char const *const pattern);
   String(String const &rhs);

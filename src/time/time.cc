@@ -1,6 +1,6 @@
 #include "time/time.h"
-
-//#include <>
+#include "macro/macro.h"
+#include "utility/utility.h"
 
 namespace small_utility {
 
@@ -18,11 +18,36 @@ Time::Time(tm const &t)
     : year_(t.tm_year + 1900), month_(t.tm_mon + 1), day_(t.tm_mday),
       hour_(t.tm_hour), minute_(t.tm_min), second_(t.tm_sec), millisecond_(0) {}
 
-Time const &Time::SetToCurrentTime() {
-  //Time_t
-  //here -------------------------------
-  //clock_getTime();
+Time::Time(tm const *t)
+    : year_(t->tm_year + 1900), month_(t->tm_mon + 1), day_(t->tm_mday),
+      hour_(t->tm_hour), minute_(t->tm_min), second_(t->tm_sec),
+      millisecond_(0) {}
+
+Time::Time(Time const &t)
+    : year_(t.Year()), month_(t.Month()), day_(t.Day()), hour_(t.Hour()),
+      minute_(t.Minute()), second_(t.Second()), millisecond_(t.Millisecond()) {}
+
+Time &Time::operator=(tm const *t) {
+  Time temp(t);
+  Swap(temp);
   return *this;
+}
+
+#if defined SMALL_UTILITY_LINUX
+Time const &Time::SetToCurrentTimeLinux() {
+  timespec t;
+  int err = clock_gettime(CLOCK_REALTIME_ALARM, &t);
+  if (err) {}// TODO(small_sheep_ 1178550325@qq.com): Need to handle the error.
+  *this = localtime(&t.tv_sec);
+  millisecond_ = t.tv_nsec / 1e6;
+  return *this;
+}
+#elif defined SMALL_UTILITY_WINDOWS
+  Time const &Time::SetToCurrentTimeWindows() {}
+#endif
+
+void Time::Swap(Time &rhs) {
+  utility::Swap(*this, rhs);
 }
 
 } // namespace time_stuff
