@@ -1,22 +1,13 @@
 #ifndef SMALL_UTILITY_LOG_LOGGER_H_
 #define SMALL_UTILITY_LOG_LOGGER_H_
 
-#if defined __linux__
-# define __SMALL_UTILITY_FUNCTION_NAME__ __PRETTY_FUNCTION__
-#elif defined _WIN32
-# define __SMALL_UTILITY_FUNCTION_NAME__ __FUNCSIG__
-#else
-# error No corresponding platform.
-#endif
-
 #include <vector>
-
-#include "file/file.h"
 #include "log/log_level.h"
 #include "log/log_message_info.h"
 #include "log/log_target.h"
+#include "macro/macro.h"
 #include "string/string.h"
-#include "time/time.h"
+#include "time/time_forward.h"
 
 namespace small_utility {
 
@@ -26,36 +17,83 @@ class Logger {
  public:
   static Logger &Instance();
 
-  void AddLogMessage(LogMessageInfo const &log_message_info);
-  void WriteToTarget(LogTarget const &log_target);
+  void AddLogMessageInfo(LogMessageInfo const &log_message_info);
+
+  // The target argument has following values:
+  //  "console" -> console
+  //  others -> file
+  void WriteToTarget(char const *const target);
+
+  string_stuff::String const &PatternDefault() const {
+    return pattern_default_;
+  }
+
+  void SetPatternDefault(char const *const pattern_default) {
+    pattern_default_ = pattern_default;
+  }
+
+  void SetLogLevelMinimum(LogLevel const log_level_minimum) {
+    log_level_minimum_ = log_level_minimum;
+  }
+
+  void Debug(char const *const pattern, string_stuff::String const &message,
+             int const line, char const *const file_name,
+             char const *const function_name);
+  void Debug(string_stuff::String const &message, int const line,
+             char const *const file_name, char const *const function_name);
+  void Info(char const *const pattern, string_stuff::String const &message,
+            int const line, char const *const file_name,
+            char const *const function_name);
+  void Info(string_stuff::String const &message, int const line,
+            char const *const file_name, char const *const function_name);
+  void Warn(char const *const pattern, string_stuff::String const &message,
+            int const line, char const *const file_name,
+            char const *const function_name);
+  void Warn(string_stuff::String const &message, int const line,
+            char const *const file_name, char const *const function_name);
+  void Error(char const *const pattern, string_stuff::String const &message,
+             int const line, char const *const file_name,
+             char const *const function_name);
+  void Error(string_stuff::String const &message, int const line,
+             char const *const file_name, char const *const function_name);
+  void Fatal(char const *const pattern, string_stuff::String const &message,
+             int const line, char const *const file_name,
+             char const *const function_name);
+  void Fatal(string_stuff::String const &message, int const line,
+             char const *const file_name, char const *const function_name);
+#define Debug(...) Logger::Instance().Debug(__VA_ARGS__, SMALL_UTILITY_LINE,\
+                                            SMALL_UTILITY_FILE_NAME,\
+                                            SMALL_UTILITY_FUNCTION_NAME)
+#define Info(...) Logger::Instance().Info(__VA_ARGS__, SMALL_UTILITY_LINE,\
+                                          SMALL_UTILITY_FILE_NAME,\
+                                          SMALL_UTILITY_FUNCTION_NAME)
+#define Warn(...) Logger::Instance().Warn(__VA_ARGS__, SMALL_UTILITY_LINE,\
+                                          SMALL_UTILITY_FILE_NAME,\
+                                          SMALL_UTILITY_FUNCTION_NAME)
+#define Error(...) Logger::Instance().Error(__VA_ARGS__, SMALL_UTILITY_LINE,\
+                                            SMALL_UTILITY_FILE_NAME,\
+                                            SMALL_UTILITY_FUNCTION_NAME)
+#define Fatal(...) Logger::Instance().Fatal(__VA_ARGS__, SMALL_UTILITY_LINE,\
+                                            SMALL_UTILITY_FILE_NAME,\
+                                            SMALL_UTILITY_FUNCTION_NAME)
 
  private:
   std::vector<LogMessageInfo> log_message_infos_;
-  LogLevel minimum_log_level_;
+  string_stuff::String pattern_default_;
+  LogLevel log_level_minimum_;
 };
 
-int const ProcessLogMessageInfo(
-      char const *const pattern, char const *const content, int const line,
-      char const *const file_name, char const *const function_name,
-      LogLevel const log_level,/* out */ string_stuff::String &log_message);
-
-#define \
-  ProcessLogMessageInfo(pattern, content, log_level, log_message) \
-  ProcessLogMessageInfo(pattern, content, __LINE__, __FILE__,\
-                        __SMALL_UTILITY_FUNCTION_NAME__, log_level, log_message)
-
+int ProcessLogMessage(
+      string_stuff::String const &pattern, string_stuff::String const &message,
+      int const line, char const *const file_name,
+      char const *const function_name, LogLevel const log_level,
+      /* out */ string_stuff::String &log_message);
 
 //  destination: The output of this function. Its size_ shouldn't exceed
 //    max_function_name_size_.
 //  raw_function_name: The string from __PRETTY_FUNCTION__.
 void ParseFunctionName(char const *const raw_function_name,
                        string_stuff::String &destination);
-
-void Debug(char const *format, ...);
-void Info(char const *format, ...);
-void Warning(char const *format, ...);
-void Error(char const *format, ...);
-void Fatal(char const *format, ...);
 
 } // namespace log_stuff
 

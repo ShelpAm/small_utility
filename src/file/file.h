@@ -4,7 +4,6 @@
 #define SMALL_UTILITY_FILE_FILE_H_
 
 #include "file/file_forward.h"
-
 #include <cstdio>
 
 namespace small_utility {

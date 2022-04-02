@@ -1,75 +1,155 @@
 #include "log/logger.h"
-
-#include <cstdarg>
-//#include <cstring>
 #include <map>
-
+#include "file/file.h"
 #include "string/string.h"
+#include "time/time.h"
 #include "utility/utility.h"
 
 namespace small_utility {
 
 namespace log_stuff {
 
-/*
-void Logger::PrintFormat(LogLevel const log_level, char const *format, ...) {
-  if (static_cast<int>(log_level_) < static_cast<int>(log_level) {
-    return;
-  }
-
-  static char const *format_string = "[%s][%s][%s:%i][%s] %s";
-
-  char log_time_string[20];
-  time_t raw_time;
-  time(&raw_time);
-  tm *time_info = localtime(&raw_time);
-  strftime(log_time_string, 20, "%F %T", time_info);
-
-  char log_level_string[8];
-  if (log_level == LogLevel::kLogLevelError) {
-    strcpy(log_level_string, "Error");
-  } else if (log_level == LogLevel::kLogLevelWarning) {
-    strcpy(log_level_string, "Warning");
-  } else if (log_level == LogLevel::kLogLevelInfo) {
-    strcpy(log_level_string, "Info");
-  } else if (log_level == LogLevel::kLogLevelDebug) {
-    strcpy(log_level_string, "Debug");
-  }
-
-  static int const max_function_name_size_ = 128;
-  char function_name[max_function_name_size_];
-  ParseFunctionName(function_name, __PRETTY_FUNCTION__);
-
-  char content[max_content_size_];
-  va_list args;
-  va_start(args, format);
-  vsprintf(content, format, args);
-  va_End(args);
-
-  if (log_target_ == LogTarget::kLogTargetConsole) {
-    printf(
-        format_string, log_time_string, log_level_string,
-        __FILE__, __LINE__, function_name, content);
-  } else if (log_target_ == LogTarget::kLogTargetFile) {
-    log_file_->PrintFormat(
-        format_string, log_time_string, log_level_string,
-        __FILE__, __LINE__, function_name, content);
-  }
-
-  return;
+Logger &Logger::Instance() {
+  static Logger logger;
+  return logger;
 }
-*/
 
-#undef ProcessLogMessageInfo(pattern, content, log_level, log_message)
+void Logger::AddLogMessageInfo(LogMessageInfo const &log_message_info) {
+  log_message_infos_.push_back(log_message_info);
+}
 
-int const ProcessLogMessageInfo(
-    char const *const pattern, char const *const content, int const line,
-    char const *const file_name, char const *const function_name,
-    LogLevel const log_level, string_stuff::String &log_message) {
-  string_stuff::String pattern_string(pattern);
-  string_stuff::String buffer_string; // used to store argument name.
-  // Matches patterns with true string.
-  std::map<string_stuff::String, string_stuff::String> pattern_map;
+// TODO(small_sheep_ 1178550325@qq.com): This Method should be expanded and
+//                                       abstacted.
+void Logger::WriteToTarget(char const *const target) {
+  if (utility::Equal(target, "console")) {
+    for (auto const &i : log_message_infos_) {
+      if (i.log_level >= log_level_minimum_) {
+        printf(i.message.CStr());
+      }
+    }
+  } else {
+    file_stuff::FilePointer file_pointer(new file_stuff::File(target));
+    for (auto const &i : log_message_infos_) {
+      if (i.log_level >= log_level_minimum_) {
+        file_pointer->Print(i.message.CStr());
+      }
+    }
+  }
+}
+
+#undef Debug(...)
+#undef Info(...)
+#undef Warn(...)
+#undef Error(...)
+#undef Fatal(...)
+
+void Logger::Debug(char const *const pattern,
+                   string_stuff::String const &message, int const line,
+                   char const *const file_name,
+                   char const *const function_name) {
+  LogMessageInfo log_message_info;
+  log_message_info.log_level = LogLevel::kLogLevelDebug;
+  ProcessLogMessage(pattern, message, line, file_name, function_name,
+                    log_message_info.log_level, log_message_info.message);
+  AddLogMessageInfo(log_message_info);
+}
+void Logger::Debug(string_stuff::String const &message, int const line,
+                   char const *const file_name,
+                   char const *const function_name) {
+  Debug(PatternDefault().CStr(), message, line, file_name, function_name);
+}
+
+void Logger::Info(char const *const pattern,
+                  string_stuff::String const &message, int const line,
+                  char const *const file_name,
+                  char const *const function_name) {
+  LogMessageInfo log_message_info;
+  log_message_info.log_level = LogLevel::kLogLevelInfo;
+  ProcessLogMessage(pattern, message, line, file_name, function_name,
+                    log_message_info.log_level, log_message_info.message);
+  AddLogMessageInfo(log_message_info);
+}
+
+void Logger::Info(string_stuff::String const &message, int const line,
+                  char const *const file_name,
+                  char const *const function_name) {
+  Info(PatternDefault().CStr(), message, line, file_name, function_name);
+}
+
+void Logger::Warn(char const *const pattern,
+                  string_stuff::String const &message, int const line,
+                  char const *const file_name,
+                  char const *const function_name) {
+  LogMessageInfo log_message_info;
+  log_message_info.log_level = LogLevel::kLogLevelWarn;
+  ProcessLogMessage(pattern, message, line, file_name, function_name,
+                    log_message_info.log_level, log_message_info.message);
+  AddLogMessageInfo(log_message_info);
+}
+
+void Logger::Warn(string_stuff::String const &message, int const line,
+                  char const *const file_name,
+                  char const *const function_name) {
+  Warn(PatternDefault().CStr(), message, line, file_name, function_name);
+}
+
+void Logger::Error(char const *const pattern,
+                   string_stuff::String const &message, int const line,
+                   char const *const file_name,
+                   char const *const function_name) {
+  LogMessageInfo log_message_info;
+  log_message_info.log_level = LogLevel::kLogLevelError;
+  ProcessLogMessage(pattern, message, line, file_name, function_name,
+                    log_message_info.log_level, log_message_info.message);
+  AddLogMessageInfo(log_message_info);
+}
+
+void Logger::Error(string_stuff::String const &message, int const line,
+                   char const *const file_name,
+                   char const *const function_name) {
+  Error(PatternDefault().CStr(), message, line, file_name, function_name);
+}
+
+void Logger::Fatal(char const *const pattern,
+                   string_stuff::String const &message, int const line,
+                   char const *const file_name,
+                   char const *const function_name) {
+  LogMessageInfo log_message_info;
+  log_message_info.log_level = LogLevel::kLogLevelFatal;
+  ProcessLogMessage(pattern, message, line, file_name, function_name,
+                    log_message_info.log_level, log_message_info.message);
+  AddLogMessageInfo(log_message_info);
+}
+
+void Logger::Fatal(string_stuff::String const &message, int const line,
+                   char const *const file_name,
+                   char const *const function_name) {
+  Fatal(PatternDefault().CStr(), message, line, file_name, function_name);
+}
+
+int ProcessLogMessage(
+    string_stuff::String const &pattern, string_stuff::String const &message,
+    int const line, char const *const file_name,
+    char const *const function_name, LogLevel const log_level,
+    string_stuff::String &log_message) {
+  // Replaces patterns with true string.
+  log_message = pattern;
+  string_stuff::String function_name_real;
+  ParseFunctionName(function_name, function_name_real);
+  log_message.Replace("$(content)", message.CStr());
+  log_message.Replace("$(line)", string_stuff::String(line).CStr());
+  log_message.Replace("$(file_name)", file_name);
+  log_message.Replace("$(function_name)", function_name_real.CStr());
+  log_message.Replace(
+      "$(time)",
+      string_stuff::String(
+          time_stuff::Time().SetToCurrentTime(),
+          "$(year)-$(month)-$(day) $(hour):$(minute):$(second)").CStr());
+  log_message.Replace("$(log_level)", string_stuff::String(log_level).CStr());
+
+
+  // --------DEPRECATED--------
+  /*std::map<string_stuff::String, string_stuff::String> pattern_map;
   pattern_map["content"] = string_stuff::String(content);
   pattern_map["line"] = string_stuff::String(line);
   pattern_map["file_name"] = string_stuff::String(file_name);
@@ -102,6 +182,7 @@ int const ProcessLogMessageInfo(
     buffer_string = utility::Equal(it, pattern_map.end()) ?  "" : (*it).second;
     log_message += buffer_string;
   }
+  */
 
   return 0;
 }
@@ -113,43 +194,6 @@ void ParseFunctionName(char const *const raw_function_name,
       source_function_name.Find(' ') + 1, source_function_name.Size() - 1);
 }
 
-/*
-   void Debug(char const *format, ...) {
-   va_list args;
-   va_start(args, format);
-   Logger::PrintFormat(LogLevel::kLogLevelDebug, format, args);
-   va_End(args);
-   }
+}  // namespace log_stuff
 
-   void Info(char const *format, ...) {
-   va_list args;
-   va_start(args, format);
-   Logger::PrintFormat(LogLevel::kLogLevelInfo, format, args);
-   va_End(args);
-   }
-
-   void Warning(char const *format, ...) {
-   va_list args;
-   va_start(args, format);
-   Logger::PrintFormat(LogLevel::kLogLevelWarning, format, args);
-   va_End(args);
-   }
-
-   void Error(char const *format, ...) {
-   va_list args;
-   va_start(args, format);
-   Logger::PrintFormat(LogLevel::kLogLevelError, format, args);
-   va_End(args);
-   }
-
-   void Fatal(char const *format, ...) {
-   va_list args;
-   va_start(args, format);
-   Logger::PrintFormat(LogLevel::kLogLevelError, format, args);
-   va_End(args);
-   }
-   */
-
-}
-
-}
+}  // namespace small_utility

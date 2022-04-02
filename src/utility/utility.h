@@ -2,6 +2,7 @@
 #define SMALL_UTILITY_UTILITY_UTILITY_H_
 
 #include <cstdio>
+#include <cstring>
 #include "macro/macro.h"
 #if defined SMALL_UTILITY_LINUX
 # include <time.h>
@@ -44,9 +45,13 @@ inline void Swap(type &lhs, type &rhs) {
 }
 
 // Provide an interface, which is to decide if the to object is equal.
-template<typename left_type, typename right_type>
-inline bool Equal(left_type const &lhs, right_type const &rhs) {
+template<typename TLeft, typename TRight>
+inline bool Equal(TLeft const &lhs, TRight const &rhs) {
   return lhs == rhs;
+}
+
+inline bool Equal(char const *const lhs, char const *const rhs) {
+  return !strcmp(lhs, rhs);
 }
 
 // Provide an interface, which is to decide if the to object is Unequal.

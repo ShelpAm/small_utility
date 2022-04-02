@@ -1,20 +1,28 @@
 #include "log/logger.h"
-
 #include "string/string.h"
 
 using namespace small_utility;
 
 int main() {
-  string_stuff::String message;
-  log_stuff::ProcessLogMessageInfo(
-      "[$(time)] $(log_level) $(file_name):$(line) in $(function_name): $(ontent)\n",
-      //"$(function_name) $(file_name)",
-      "test_", log_stuff::LogLevel::kLogLevelInfo, message);
+  log_stuff::Logger::Instance().SetPatternDefault(
+      "[$(time)] $(log_level) $(file_name):$(line) in function"
+      " '$(function_name)': $(content)\n");
+  log_stuff::Logger::Instance().SetLogLevelMinimum(
+      log_stuff::LogLevel::kLogLevelInfo);
 
+  string_stuff::String buffer;
+  for (int i = 0; i != 10000; ++i) {
+    //buffer = "times:" + string_stuff::String(i);
+    log_stuff::Info("times: " + string_stuff::String(i));
+    log_stuff::Debug("wtf debug");
+    log_stuff::Info("Info");
+    log_stuff::Error("Test error");
+    log_stuff::Fatal("Fatal! test");
+    log_stuff::Warn("Warn test");
+  }
 
-  //log_stuff::LogMessageInfo message("11111\n", "11", time_stuff::time(2022, 2, 14, 8, 33, 1, 0), log_stuff::LogLevel::kLogLevelInfo);
-
-  string_stuff::Print(message);
+  log_stuff::Logger::Instance().WriteToTarget("console");
+  log_stuff::Logger::Instance().WriteToTarget("temp_log");
 
   return 0;
 }
