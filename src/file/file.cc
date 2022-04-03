@@ -1,9 +1,9 @@
 // Copyright 2022 small_sheep_
 
 #include "file/file.h"
-
 #include <cassert>
 #include <cstring>
+#include <filesystem>
 
 namespace small_utility {
 
@@ -44,6 +44,10 @@ int File::Open(char const *const file_name, bool const truncate) {
 int File::Close() const {
   if (!file_ptr_) { return 1; }
   if (!fclose(file_ptr_)) { return 2; }
+}
+
+void MakeDirectory(char const *const path_name) {
+  std::filesystem::create_directories(path_name);
 }
 
 }  // namespace file_stuff

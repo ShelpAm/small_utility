@@ -25,6 +25,9 @@ class File {
   FILE* file_ptr_;
 };
 
+void MakeDirectory(char const *const path_name);
+void Remove(char const *const path_name);
+
 }  // namespace file_stuff
 
 }  // namespace small_utility

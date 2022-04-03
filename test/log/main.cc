@@ -1,3 +1,4 @@
+#include "file/file.h"
 #include "log/logger.h"
 #include "string/string.h"
 
@@ -11,18 +12,19 @@ int main() {
       log_stuff::LogLevel::kLogLevelInfo);
 
   string_stuff::String buffer;
-  for (int i = 0; i != 10000; ++i) {
+  //for (int i = 0; i != 10000; ++i) {
     //buffer = "times:" + string_stuff::String(i);
-    log_stuff::Info("times: " + string_stuff::String(i));
+    //log_stuff::Info("times: " + string_stuff::String(i));
     log_stuff::Debug("wtf debug");
     log_stuff::Info("Info");
     log_stuff::Error("Test error");
     log_stuff::Fatal("Fatal! test");
     log_stuff::Warn("Warn test");
-  }
+  //}
 
   log_stuff::Logger::Instance().WriteToTarget("console");
-  log_stuff::Logger::Instance().WriteToTarget("temp_log");
+  file_stuff::MakeDirectory("temp");
+  log_stuff::Logger::Instance().WriteToTarget("temp/temp_log");
 
   return 0;
 }
