@@ -31,7 +31,3 @@ target("test-reference_counting")
     add_files("reference_counting/**.cc")
 target_end()
 
-
-target("run_all_tests")
-    add_files("run_all_tests/**.cc")
-target_end()
