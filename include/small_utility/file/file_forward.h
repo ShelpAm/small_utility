@@ -3,7 +3,7 @@
 #ifndef SMALL_UTILITY_FILE_FILE_FORWARD_H
 #define SMALL_UTILITY_FILE_FILE_FORWARD_H
 
-#include "reference_counting/reference_counted_pointer.h"
+#include "small_utility/reference_counting/reference_counted_pointer.h"
 
 namespace small_utility {
 

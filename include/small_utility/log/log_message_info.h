@@ -1,7 +1,7 @@
 #ifndef SMALL_UTILITY_LOG_LOG_MESSAGE_INFO_H_
 #define SMALL_UTILITY_LOG_LOG_MESSAGE_INFO_H_
 
-#include "string/string.h"
+#include "small_utility/string/string.h"
 
 namespace small_utility {
 

@@ -1,6 +1,6 @@
-#include "file/file.h"
-#include "log/logger.h"
-#include "string/string.h"
+#include "small_utility/file/file.h"
+#include "small_utility/log/logger.h"
+#include "small_utility/string/string.h"
 
 using namespace small_utility;
 

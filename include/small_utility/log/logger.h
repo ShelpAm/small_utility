@@ -2,12 +2,12 @@
 #define SMALL_UTILITY_LOG_LOGGER_H_
 
 #include <vector>
-#include "log/log_level.h"
-#include "log/log_message_info.h"
-#include "log/log_target.h"
-#include "macro/macro.h"
-#include "string/string.h"
-#include "time/time_forward.h"
+#include "small_utility/log/log_level.h"
+#include "small_utility/log/log_message_info.h"
+#include "small_utility/log/log_target.h"
+#include "small_utility/macro/macro.h"
+#include "small_utility/string/string.h"
+#include "small_utility/time/time_forward.h"
 
 namespace small_utility {
 

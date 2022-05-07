@@ -1,13 +1,13 @@
 // Copyright 2022 small_sheep_
 
-#include "string/string.h"
+#include "small_utility/string/string.h"
 
 #include <cassert>
 #include <cstdio>
 #include <cstring>
 
-#include "time/time.h"
-#include "utility/utility.h"
+#include "small_utility/time/time.h"
+#include "small_utility/utility/utility.h"
 
 namespace small_utility {
 

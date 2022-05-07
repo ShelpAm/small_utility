@@ -3,8 +3,8 @@
 #ifndef SMALL_UTILITY_SRC_STRING_STRING_H_
 #define SMALL_UTILITY_SRC_STRING_STRING_H_
 
-#include "time/time_forward.h"
-#include "log/log_level.h"
+#include "small_utility/time/time_forward.h"
+#include "small_utility/log/log_level.h"
 
 namespace small_utility {
 

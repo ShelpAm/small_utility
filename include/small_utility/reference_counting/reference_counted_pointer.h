@@ -1,7 +1,7 @@
 #ifndef SMALL_UTILITY_REFERENCE_COUNTING_REFERENCE_COUNTED_POINTER_H_     
 #define SMALL_UTILITY_REFERENCE_COUNTING_REFERENCE_COUNTED_POINTER_H_
 
-#include "reference_counting/reference_holder.h"
+#include "small_utility/reference_counting/reference_holder.h"
 
 namespace small_utility {
 

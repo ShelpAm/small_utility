@@ -1,9 +1,9 @@
-#include "log/logger.h"
+#include "small_utility/log/logger.h"
 #include <map>
-#include "file/file.h"
-#include "string/string.h"
-#include "time/time.h"
-#include "utility/utility.h"
+#include "small_utility/file/file.h"
+#include "small_utility/string/string.h"
+#include "small_utility/time/time.h"
+#include "small_utility/utility/utility.h"
 
 namespace small_utility {
 

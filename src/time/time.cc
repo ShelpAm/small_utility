@@ -1,6 +1,6 @@
-#include "time/time.h"
-#include "macro/macro.h"
-#include "utility/utility.h"
+#include "small_utility/time/time.h"
+#include "small_utility/macro/macro.h"
+#include "small_utility/utility/utility.h"
 
 namespace small_utility {
 

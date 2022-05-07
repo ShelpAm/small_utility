@@ -3,7 +3,7 @@ add_deps("small_utility")
 set_kind("binary")
 
 set_objectdir("$(buildir)/obj/")
-add_includedirs("$(projectdir)/test/", "$(projectdir)/src/")
+add_includedirs("$(projectdir)/test/", "$(projectdir)/include/")
 add_linkdirs("$(projectdir)/lib/", "$(projectdir)/build/")
 add_links("small_utility")
 
