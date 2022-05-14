@@ -5,6 +5,10 @@ template<typename value_type>
 Vector2D<value_type>::Vector2D() : x(0), y(0) {}
 
 template<typename value_type>
+Vector2D<value_type>::Vector2D(value_type const scalar)
+    : x(scalar), y(scalar) {}
+
+template<typename value_type>
 Vector2D<value_type>::Vector2D(value_type _x, value_type _y) : x(_x), y(_y) {}
 
 template<typename value_type>

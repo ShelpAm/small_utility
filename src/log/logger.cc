@@ -37,11 +37,11 @@ void Logger::WriteToTarget(char const *const target) {
   }
 }
 
-#undef Debug(...)
-#undef Info(...)
-#undef Warn(...)
-#undef Error(...)
-#undef Fatal(...)
+#undef Debug
+#undef Info
+#undef Warn
+#undef Error
+#undef Fatal
 
 void Logger::Debug(char const *const pattern,
                    string_stuff::String const &message, int const line,

@@ -4,6 +4,7 @@
 #include "small_utility/math/matrix/matrix4x4_forward.h"
 #include <cassert>
 #include <cstdio>
+#include "small_utility/math/vector/vector3d.h"
 #include "small_utility/math/vector/vector4d.h"
 
 template<typename value_type> struct Matrix4x4 {
@@ -19,7 +20,7 @@ template<typename value_type> struct Matrix4x4 {
             value_type x3, value_type y3, value_type z3, value_type w3);
   row_type &operator[](int index) {
     if (index < 0 || index > 3) {
-      throw std::out_of_range("Matrix index out of range");
+      throw std::out_of_range("Matrix4x4 index out of range");
     }
     return value[index];
   }
@@ -30,7 +31,7 @@ template<typename value_type> struct Matrix4x4 {
 
 // cross
 template<typename T>
-operator*(Matrix4x4<T> const &m1, Matrix4x4<T> const &m2);
+Matrix4x4<T> operator*(Matrix4x4<T> const &m1, Matrix4x4<T> const &m2);
 
 template<typename T>
 Matrix4x4<T> Translate(Vector3D<T> const &tranlation);

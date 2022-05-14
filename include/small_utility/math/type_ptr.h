@@ -1,19 +1,15 @@
-#ifndef COMMAND_AND_DOMINATE_SRC_MATH_TYPE_PTR_H_
-#define COMMAND_AND_DOMINATE_SRC_MATH_TYPE_PTR_H_
+#ifndef COMMAND_AND_DOMINATE_MATH_TYPE_PTR_H_
+#define COMMAND_AND_DOMINATE_MATH_TYPE_PTR_H_
 
 #include "small_utility/math/vector/vector.h"
 #include "small_utility/math/matrix/matrix.h"
 
-template<typename value_type> value_type *GetValuePtr(
-    Vector2DPtr<value_type> vector2d_ptr);
+template<typename T> T *GetValuePointer(Vector2D<T> const &vector2d);
 
-template<typename value_type> value_type *GetValuePtr(
-    Vector3DPtr<value_type> vector3d_ptr);
+template<typename T> T *GetValuePointer(Vector3D<T> const &vector3d);
 
-template<typename value_type> value_type *GetValuePtr(
-    Vector4DPtr<value_type> vector4d_ptr);
+template<typename T> T *GetValuePointer(Vector4D<T> const &vector4d);
 
-template<typename value_type> value_type *GetValuePtr(
-    Matrix4x4Ptr<value_type> matrix4x4_ptr);
+template<typename T> T *GetValuePointer(Matrix4x4<T> const &matrix4x4);
 
-#endif // !COMMAND_AND_DOMINATE_SRC_MATH_TYPE_PTR_H_
+#endif  // COMMAND_AND_DOMINATE_MATH_TYPE_PTR_H_

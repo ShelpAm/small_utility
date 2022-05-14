@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-template<typename T> Matrix4x4<T>::Matrix4x4() : value({0}) {}
+template<typename T> Matrix4x4<T>::Matrix4x4() : value{0} {}
 
 template<typename value_type> Matrix4x4<value_type>::Matrix4x4(
     value_type scalar)
@@ -30,7 +30,7 @@ Matrix4x4<T> operator*(Matrix4x4<T> const &m1, Matrix4x4<T> const &m2) {
   Matrix4x4<T> return_buffer;
   for (int i = 0; i != 4; ++i) {
     for (int j = 0; j != 4; ++j) {
-      for (k = 0; k != 4; ++k) {
+      for (int k = 0; k != 4; ++k) {
         return_buffer[i][j] += m1[i][k] * m2[k][j];
       }
     }
@@ -41,7 +41,7 @@ Matrix4x4<T> operator*(Matrix4x4<T> const &m1, Matrix4x4<T> const &m2) {
 template<typename T>
 Matrix4x4<T> Translate(Vector3D<T> const &tranlation) {
   Matrix4x4<T> return_buffer(1.0f);
-  for (int i = 0; i != 3) {
+  for (int i = 0; i != 3; ++i) {
     return_buffer[i][4] = tranlation[i];
   }
   return return_buffer;

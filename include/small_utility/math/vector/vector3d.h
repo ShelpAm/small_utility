@@ -1,9 +1,8 @@
 #ifndef COMMAND_AND_DOMINIATE_SRC_MATH_VECTOR_VECTOR3D_H_
 #define COMMAND_AND_DOMINIATE_SRC_MATH_VECTOR_VECTOR3D_H_
 
-#include <memory>
-
 #include "small_utility/math/vector/vector3d_forward.h"
+#include <memory>
 
 template<typename value_type> struct Vector3D {
  public:
@@ -12,6 +11,12 @@ template<typename value_type> struct Vector3D {
   Vector3D(value_type _x, value_type _y, value_type _z);
   Vector3D(Vector3D<value_type> const &rhs);
   ~Vector3D();
+  value_type operator[](int const index) {
+    if (index < 0 || index > 2) {
+      throw std::out_of_range("Vector3D index out of range");
+    }
+    return *(&x + index);
+  }
 
   value_type x, y, z;
 };

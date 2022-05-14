@@ -8,6 +8,7 @@
 
 template<typename value_type> struct Vector4D {
  public:
+  Vector4D(value_type scalar);
   Vector4D(value_type _x, value_type _y, value_type _z, value_type _w);
   value_type &operator[](int index) {
     if (index < 0 || index > 3) {

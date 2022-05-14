@@ -6,6 +6,7 @@
 template<typename value_type> struct Vector2D {
  public:
   Vector2D();
+  Vector2D(value_type const scalar);
   Vector2D(value_type _x, value_type _y);
   ~Vector2D();
 
