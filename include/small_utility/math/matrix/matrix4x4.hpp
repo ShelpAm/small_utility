@@ -3,6 +3,8 @@
 
 #include <cmath>
 
+template<typename T> Matrix4x4<T>::Matrix4x4() : value({0}) {}
+
 template<typename value_type> Matrix4x4<value_type>::Matrix4x4(
     value_type scalar)
     : value{row_type(scalar, 0, 0, 0),
@@ -21,6 +23,55 @@ template<typename value_type> Matrix4x4<value_type>::Matrix4x4(
             row_type(x3, y3, z3, w3)} {}
 
 template<typename value_type> Matrix4x4<value_type>::~Matrix4x4() {}
+
+// cross
+template<typename T>
+Matrix4x4<T> operator*(Matrix4x4<T> const &m1, Matrix4x4<T> const &m2) {
+  Matrix4x4<T> return_buffer;
+  for (int i = 0; i != 4; ++i) {
+    for (int j = 0; j != 4; ++j) {
+      for (k = 0; k != 4; ++k) {
+        return_buffer[i][j] += m1[i][k] * m2[k][j];
+      }
+    }
+  }
+  return return_buffer;
+}
+
+template<typename T>
+Matrix4x4<T> Translate(Vector3D<T> const &tranlation) {
+  Matrix4x4<T> return_buffer(1.0f);
+  for (int i = 0; i != 3) {
+    return_buffer[i][4] = tranlation[i];
+  }
+  return return_buffer;
+}
+
+// This function will return a matrix4x4 representing the clockwise ratation
+// around direction.
+template<typename T>
+Matrix4x4<T> Rotate(float const radians, Vector3D<T> const &direction) {
+  Matrix4x4<T> return_buffer;
+  float const &t = radians;
+  Vector3D<T> const &r = direction;
+  float const _c = 1 - cos(t), c = cos(t), s = sin(t);
+  T const rxy = r.x * r.y, rxz = r.x * r.z, ryz = r.y * r.z;
+  T const rx2 = pow(r.x, 2), ry2 = pow (r.y, 2), rz2 = pow(r.z, 2);
+  return_buffer[0][0] = c + rx2 * _c;
+  return_buffer[1][1] = c + ry2 * _c;
+  return_buffer[2][2] = c + rz2 * _c;
+  return_buffer[3][3] = 1;
+  return_buffer[0][1] = rxy * _c - r.z * s;
+  return_buffer[1][0] = rxy * _c + r.z * s;
+  return_buffer[0][2] = rxz * _c + r.y * s;
+  return_buffer[2][0] = rxz * _c - r.y * s;
+  return_buffer[1][2] = ryz * _c - r.x * s;
+  return_buffer[2][1] = ryz * _c + r.x * s;
+  return return_buffer;
+}
+
+template<typename T>
+Matrix4x4<T> LookAt();
 
 template<typename value_type> Matrix4x4<value_type> Perspective(
     value_type y_field_of_view, value_type aspect,
