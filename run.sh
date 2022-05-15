@@ -1,7 +1,6 @@
-for i in {0..0}
+test_list=(file log reference_counting string utility)
+
+for i in ${test_list[@]}
 do
-  #./build/test-file
-  #./build/test-string
-  ./build/test-log
+  build/test/$i/test_$i
 done
-exit 0

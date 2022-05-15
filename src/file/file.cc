@@ -1,50 +1,46 @@
 // Copyright 2022 small_sheep_
-
+//
 #include "small_utility/file/file.h"
 #include <cassert>
 #include <cstring>
+#include <exception>
 #include <filesystem>
 
 namespace small_utility {
 
 namespace file_stuff {
 
-File::File(char const *const file_name, bool const truncate) {
-  if (Open(file_name, truncate)) {
-    assert(0);
+void File::MakeFromFile(int const id, char const *const file_name,
+                        bool const truncate) {
+  FILE *const file_pointer = fopen(file_name, truncate ? "wb+" : "ab+");
+  if (!file_pointer) {
+    throw std::runtime_error("File unable to make from file.");
   }
+  File::All().try_emplace(id, file_pointer);
 }
+
+File &File::FetchById(int const id) {
+  if (!all_.contains(id)) {
+    throw std::runtime_error("No such file.");
+  }
+  return all_.at(id);
+}
+
+File::File(FILE *const file_pointer) : file_pointer_(file_pointer) {}
 
 File::~File() {
-  if (Close()) {
-    assert(0);
-  }
+  Close();
 }
 
-int File::Print(char const *const content) const {
-  if (!file_ptr_) { return 1; }
-  if (!content) { return 3; }
-  fwrite(content, 1, strlen(content), file_ptr_);
-  return 0;
+void File::Write(char const *const str) const {
+  fwrite(str, 1, strlen(str), file_pointer_);
 }
 
-int File::Open(char const *const file_name, bool const truncate) {
-  char const *str;
-  if (truncate) {
-    str = "wb+";
-  } else {
-    str = "ab+";
-  }
-
-  file_ptr_ = fopen(file_name, str);
-  if (!file_ptr_) { return 1; }
-  return 0;
+void File::Close() const {
+  fclose(file_pointer_);
 }
 
-int File::Close() const {
-  if (!file_ptr_) { return 1; }
-  if (!fclose(file_ptr_)) { return 2; }
-}
+std::map<int, File> File::all_;
 
 void MakeDirectory(char const *const path_name) {
   std::filesystem::create_directories(path_name);

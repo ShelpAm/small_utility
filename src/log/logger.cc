@@ -28,10 +28,10 @@ void Logger::WriteToTarget(char const *const target) {
       }
     }
   } else {
-    file_stuff::FilePointer file_pointer(new file_stuff::File(target));
+    file_stuff::File::MakeFromFile(0, target, false);
     for (auto const &i : log_message_infos_) {
       if (i.log_level >= log_level_minimum_) {
-        file_pointer->Print(i.message.CStr());
+        file_stuff::File::All().at(0).Write(i.message.CStr());
       }
     }
   }
