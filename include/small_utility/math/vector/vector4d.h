@@ -2,25 +2,27 @@
 #define COMMAND_AND_DOMINATE_SRC_MATH_VECTOR_VECTOR4D_H_
 
 #include "small_utility/math/vector/vector4d_forward.h"
+#include <stdexcept>
 
-#include <cassert>
-#include <cstdio>
-
-template<typename value_type> struct Vector4D {
+template<typename T> struct Vector4D {
  public:
-  Vector4D(value_type scalar);
-  Vector4D(value_type _x, value_type _y, value_type _z, value_type _w);
-  value_type &operator[](int index) {
+  Vector4D(T scalar);
+  Vector4D(T _x, T _y, T _z, T _w);
+  T &operator[](int const index) {
     if (index < 0 || index > 3) {
-      printf("[ERROR::Vector4d<value_type>::operator[]] "
-             "index is out of range.");
+      throw std::out_of_range("Vector4D index out of range");
     }
-    assert(index >= 0 && index < 4);
-    return *(reinterpret_cast<value_type *>(this) + index);
+    return *(&x + index);
+  }
+  T operator[](int const index) const {
+    if (index < 0 || index > 3) {
+      throw std::out_of_range("Vector4D index out of range");
+    }
+    return *(&x + index);
   }
   ~Vector4D();
 
-  value_type x, y, z, w;
+  T x, y, z, w;
 };
 
 #include "small_utility/math/vector/vector4d.hpp"

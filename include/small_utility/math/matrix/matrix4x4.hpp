@@ -48,14 +48,18 @@ Matrix4x4<T> Translate(Vector3D<T> const &tranlation) {
   return return_buffer;
 }
 
-// This function will return a matrix4x4 representing the clockwise ratation
-// around direction.
+// This function will return a matrix4x4 representing /*the clockwise ratation
+// around direction.*/ like this:
+//       __\
+//      /  /
+//    --|--->
+//      \__/
 template<typename T>
 Matrix4x4<T> Rotate(float const radians, Vector3D<T> const &direction) {
   Matrix4x4<T> return_buffer;
-  float const &t = radians;
+  float const t = radians;
   Vector3D<T> const &r = direction;
-  float const _c = 1 - cos(t), c = cos(t), s = sin(t);
+  float const c = cosf(t), s = sinf(t), _c = 1 - cosf(t);
   T const rxy = r.x * r.y, rxz = r.x * r.z, ryz = r.y * r.z;
   T const rx2 = pow(r.x, 2), ry2 = pow (r.y, 2), rz2 = pow(r.z, 2);
   return_buffer[0][0] = c + rx2 * _c;
@@ -74,21 +78,18 @@ Matrix4x4<T> Rotate(float const radians, Vector3D<T> const &direction) {
 template<typename T>
 Matrix4x4<T> LookAt();
 
-template<typename value_type> Matrix4x4<value_type> Perspective(
-    value_type y_field_of_view, value_type aspect,
-    value_type z_near, value_type z_far) {
-  value_type const tan_half_y_field_of_view =
-      tan(y_field_of_view / static_cast<value_type>(2));
+template<typename T>
+Matrix4x4<T> Perspective(
+    T y_field_of_view, T aspect, T z_near, T z_far) {
+  T const tan_half_y_field_of_view = tan(y_field_of_view / static_cast<T>(2));
 
-  Matrix4x4<value_type> result(static_cast<value_type>(0));
-  result[0][0] =
-      static_cast<value_type>(1) / (aspect * tan_half_y_field_of_view);
-  result[1][1] = static_cast<value_type>(1) / tan_half_y_field_of_view;
-  result[2][2] = - (z_far + z_near) / (z_far - z_near);
-  result[2][3] = static_cast<value_type>(1);
-  result[3][2] =
-      - static_cast<value_type>(2) * z_far * z_near / (z_far - z_near);
-  return result;
+  Matrix4x4<T> return_buffer;
+  return_buffer[0][0] = static_cast<T>(1) / (aspect * tan_half_y_field_of_view);
+  return_buffer[1][1] = static_cast<T>(1) / tan_half_y_field_of_view;
+  return_buffer[2][2] = - (z_far + z_near) / (z_far - z_near);
+  return_buffer[2][3] = static_cast<T>(1);
+  return_buffer[3][2] = - static_cast<T>(2) * z_far * z_near / (z_far - z_near);
+  return return_buffer;
 }
 
-#endif // !COMMAND_AND_DOMINATE_SRC_MATH_MATRIX_MATRIX4X4_HPP_
+#endif  // COMMAND_AND_DOMINATE_SRC_MATH_MATRIX_MATRIX4X4_HPP_
