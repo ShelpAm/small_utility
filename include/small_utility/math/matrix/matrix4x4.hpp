@@ -3,7 +3,8 @@
 
 #include <cmath>
 
-template<typename T> Matrix4x4<T>::Matrix4x4() : value{0} {}
+template<typename T> Matrix4x4<T>::Matrix4x4()
+    : value{row_type(0), row_type(0), row_type(0), row_type(0)} {}
 
 template<typename value_type> Matrix4x4<value_type>::Matrix4x4(
     value_type scalar)
