@@ -6,16 +6,15 @@
 #include "small_utility/math/vector/vector3d.h"
 #include "small_utility/math/vector/vector4d.h"
 
-template<typename value_type> struct Matrix4x4 {
-  using T = value_type;
-  using row_type = Vector4D<value_type>;
+template<typename T> struct Matrix4x4 {
+  using row_type = Vector4D<T>;
  public:
   Matrix4x4();
-  Matrix4x4(value_type scalar);
-  Matrix4x4(value_type x0, value_type y0, value_type z0, value_type w0,
-            value_type x1, value_type y1, value_type z1, value_type w1,
-            value_type x2, value_type y2, value_type z2, value_type w2,
-            value_type x3, value_type y3, value_type z3, value_type w3);
+  Matrix4x4(T scalar);
+  Matrix4x4(T x0, T y0, T z0, T w0,
+            T x1, T y1, T z1, T w1,
+            T x2, T y2, T z2, T w2,
+            T x3, T y3, T z3, T w3);
   row_type &operator[](int index) {
     if (index < 0 || index > 3) {
       throw std::out_of_range("Matrix4x4 index out of range");
