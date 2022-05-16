@@ -43,7 +43,7 @@ template<typename T>
 Matrix4x4<T> Translate(Vector3D<T> const &tranlation) {
   Matrix4x4<T> return_buffer(1.0f);
   for (int i = 0; i != 3; ++i) {
-    return_buffer[i][4] = tranlation[i];
+    return_buffer[i][3] = tranlation[i];
   }
   return return_buffer;
 }
