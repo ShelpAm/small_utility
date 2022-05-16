@@ -1,12 +1,4 @@
-set (libraries
-	file
-	log
-	string
-	time
-	utility
-)
-
-link_libraries (${libraries})
+link_libraries (small_utility)
 
 add_subdirectory (file)
 add_subdirectory (log)
