@@ -79,15 +79,15 @@ template<typename T>
 Matrix4x4<T> LookAt();
 
 template<typename T>
-Matrix4x4<T> Perspective(
-    T y_field_of_view, T aspect, T z_near, T z_far) {
-  T const tan_half_y_field_of_view = tan(y_field_of_view / static_cast<T>(2));
+Matrix4x4<T> Perspective(T const fov_y, T const aspect,
+                         T const z_near, T const z_far) {
+  T const tan_half_fov_y = tan(fov_y/ static_cast<T>(2));
 
   Matrix4x4<T> return_buffer;
-  return_buffer[0][0] = static_cast<T>(1) / (aspect * tan_half_y_field_of_view);
-  return_buffer[1][1] = static_cast<T>(1) / tan_half_y_field_of_view;
+  return_buffer[0][0] = static_cast<T>(1) / (aspect * tan_half_fov_y);
+  return_buffer[1][1] = static_cast<T>(1) / tan_half_fov_y;
   return_buffer[2][2] = - (z_far + z_near) / (z_far - z_near);
-  return_buffer[2][3] = static_cast<T>(1);
+  return_buffer[2][3] = - static_cast<T>(1);
   return_buffer[3][2] = - static_cast<T>(2) * z_far * z_near / (z_far - z_near);
   return return_buffer;
 }

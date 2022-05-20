@@ -48,7 +48,8 @@ template<typename T>
 Matrix4x4<T> LookAt();
 
 template<typename T>
-Matrix4x4<T> Perspective(T y_field_of_view, T aspect, T z_near, T z_far);
+Matrix4x4<T> Perspective(T const fov_y, T const aspect,
+                         T const z_near, T const z_far);
 
 #include "small_utility/math/matrix/matrix4x4.hpp"
 
