@@ -58,7 +58,7 @@ template<typename T>
 Matrix4x4<T> Rotate(float const radians, Vector3D<T> const &direction) {
   Matrix4x4<T> return_buffer;
   float const t = radians;
-  Vector3D<T> const &r = direction;
+  Vector3D<T> const &r = Normalize(direction);
   float const c = cosf(t), s = sinf(t), _c = 1 - cosf(t);
   T const rxy = r.x * r.y, rxz = r.x * r.z, ryz = r.y * r.z;
   T const rx2 = pow(r.x, 2), ry2 = pow (r.y, 2), rz2 = pow(r.z, 2);

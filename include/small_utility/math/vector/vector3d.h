@@ -2,6 +2,7 @@
 #define COMMAND_AND_DOMINIATE_SRC_MATH_VECTOR_VECTOR3D_H_
 
 #include "small_utility/math/vector/vector3d_forward.h"
+#include <cmath>
 #include <stdexcept>
 
 template<typename T>
@@ -48,6 +49,16 @@ template<typename T> Vector3D<T> operator/(Vector3D<T> const &lhs, T rhs) {
 
 template<typename T> Vector3D<T> operator*(Vector3D<T> const &lhs, T rhs) {
   return Vector3D<T>(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
+}
+
+template<typename T>
+T Length(Vector3D<T> const &rhs) {
+  return sqrt(rhs.x * rhs.x + rhs.y * rhs.y + rhs.z * rhs.z);
+}
+
+template<typename T>
+Vector3D<T> Normalize(Vector3D<T> const &rhs) {
+  return rhs / Length(rhs);
 }
 
 #include "small_utility/math/vector/vector3d.hpp"
